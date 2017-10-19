@@ -1,0 +1,14 @@
+package: toptal
+import:
+- package: github.com/astaxie/beego
+  version: ~1.9.0
+- package: github.com/lib/pq
+- package: github.com/serenize/snaker
+- package: github.com/ugorji/go
+  subpackages:
+  - codec
+testImport:
+- package: github.com/smartystreets/goconvey
+  version: 1.6.2
+  subpackages:
+  - convey

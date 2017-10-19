@@ -1,0 +1,10 @@
+.DS_Store
+.idea/
+
+swagger/swagger.json
+swagger/swagger.md
+vendor/
+lastupdate.tmp
+toptal
+
+commentsRouter______*

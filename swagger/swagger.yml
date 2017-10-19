@@ -1,0 +1,144 @@
+swagger: "2.0"
+info:
+  title: Toptal sample project
+  description: beego has a very cool tools to autogenerate documents for your API
+  version: 1.0.0
+  termsOfService: http://beego.me/
+  contact:
+    email: astaxie@gmail.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+basePath: /api/v1
+paths:
+  /permissions/:
+    get:
+      tags:
+      - permissions
+      description: get Permissions
+      operationId: PermissionsController.Get All
+      parameters:
+      - in: query
+        name: query
+        description: Filter. e.g. col1:v1,col2:v2 ...
+        type: string
+      - in: query
+        name: fields
+        description: Fields returned. e.g. col1,col2 ...
+        type: string
+      - in: query
+        name: sortby
+        description: Sorted-by fields. e.g. col1,col2 ...
+        type: string
+      - in: query
+        name: order
+        description: Order corresponding to each sortby field, if single value, apply
+          to all sortby fields. e.g. desc,asc ...
+        type: string
+      - in: query
+        name: limit
+        description: Limit the size of result set. Must be an integer
+        type: string
+      - in: query
+        name: offset
+        description: Start position of result set. Must be an integer
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Permissions'
+        "403":
+          description: ""
+    post:
+      tags:
+      - permissions
+      description: create Permissions
+      operationId: PermissionsController.Post
+      parameters:
+      - in: body
+        name: body
+        description: body for Permissions content
+        required: true
+        schema:
+          $ref: '#/definitions/models.Permissions'
+      responses:
+        "201":
+          description: '{int} models.Permissions'
+        "403":
+          description: body is empty
+  /permissions/{id}:
+    get:
+      tags:
+      - permissions
+      description: get Permissions by id
+      operationId: PermissionsController.Get One
+      parameters:
+      - in: path
+        name: id
+        description: The key for staticblock
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Permissions'
+        "403":
+          description: :id is empty
+    put:
+      tags:
+      - permissions
+      description: update the Permissions
+      operationId: PermissionsController.Put
+      parameters:
+      - in: path
+        name: id
+        description: The id you want to update
+        required: true
+        type: string
+      - in: body
+        name: body
+        description: body for Permissions content
+        required: true
+        schema:
+          $ref: '#/definitions/models.Permissions'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.Permissions'
+        "403":
+          description: :id is not int
+    delete:
+      tags:
+      - permissions
+      description: delete the Permissions
+      operationId: PermissionsController.Delete
+      parameters:
+      - in: path
+        name: id
+        description: The id you want to delete
+        required: true
+        type: string
+      responses:
+        "200":
+          description: '{string} delete success!'
+        "403":
+          description: id is empty
+definitions:
+  models.Permissions:
+    title: Permissions
+    type: object
+    properties:
+      Description:
+        type: string
+      Id:
+        type: integer
+        format: int64
+      Title:
+        type: string
+tags:
+- name: permissions
+  description: |2
+     PermissionsController operations for Permissions
