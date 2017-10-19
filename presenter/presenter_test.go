@@ -3,14 +3,13 @@ package presenter
 import (
 	"testing"
 
+	"encoding/json"
+
 	. "github.com/smartystreets/goconvey/convey"
-	"github.com/ugorji/go/codec"
 )
 
 func TestJsonSerializerEncode(t *testing.T) {
-	var ser = Presenter{}
-	var a1Handler = new(StructView).TranslateCase().Include("A")
-	ser.AddHook(A1{}, a1Handler)
+	var ser = New().AddHook(A1{}, new(structView).TranslateCase().Include("A"))
 
 	var testMap = []struct {
 		Scenario string
@@ -37,8 +36,7 @@ func TestJsonSerializerEncode(t *testing.T) {
 	for _, test := range testMap {
 		var scenario, sample, result = test.Scenario, test.Sample, test.Result
 
-		var data []byte
-		var dataErr = codec.NewEncoderBytes(&data, &ser.JsonHandle).Encode(sample)
+		var data, dataErr = json.Marshal(ser.AsJson(sample))
 		Convey(scenario+"no errors occured", t, func() {
 			So(dataErr, ShouldEqual, nil)
 		})
@@ -49,12 +47,10 @@ func TestJsonSerializerEncode(t *testing.T) {
 }
 
 func TestJsonSerializerDecode(t *testing.T) {
-	var ser = Presenter{}
-	var a1Handler = new(StructView).TranslateCase().Include("A")
-	ser.AddHook(A1{}, a1Handler)
+	var ser = New().AddHook(A1{}, new(structView).TranslateCase().Include("A"))
 
 	var test = func(scenario string, js string, emptyData interface{}, sample interface{}) {
-		var dataErr = codec.NewDecoderBytes([]byte(js), &ser.JsonHandle).Decode(emptyData)
+		var dataErr = json.Unmarshal([]byte(js), ser.AsJson(emptyData))
 		Convey(scenario+"no errors occured", t, func() {
 			So(dataErr, ShouldEqual, nil)
 		})
@@ -64,21 +60,21 @@ func TestJsonSerializerDecode(t *testing.T) {
 	}
 
 	test(
-		"When simple struct serialize",
+		"When simple struct deserialize",
 		`{"a":"test1"}`,
 		&A1{},
 		&A1{A: "test1"},
 	)
 
 	test(
-		"When nested struct serialize",
+		"When nested struct deserialize",
 		`{"xxx":{"a":"test1"}}`,
 		map[string]A1{},
 		map[string]A1{"xxx": {A: "test1"}},
 	)
 
 	test(
-		"When nested pointer struct serialize",
+		"When nested pointer struct deserialize",
 		`{"xxx":{"a":"test1"}}`,
 		map[string]*A1{},
 		map[string]*A1{"xxx": {A: "test1"}},

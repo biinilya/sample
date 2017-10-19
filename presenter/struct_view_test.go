@@ -15,37 +15,37 @@ type A1 struct {
 func TestAutoSerializerStruct2Map(t *testing.T) {
 	var testMap = []struct {
 		Scenario   string
-		Serializer *StructView
+		Serializer *structView
 		Sample     A1
 		Result     map[string]interface{}
 	}{
 		{
 			"When default configured",
-			new(StructView),
+			new(structView),
 			A1{"A1test", -12.25, 12},
 			map[string]interface{}{"A": "A1test", "AAA": -12.25, "AaBB": 12},
 		},
 		{
 			"When snake case requested",
-			new(StructView).TranslateCase(),
+			new(structView).TranslateCase(),
 			A1{"A1test", -12.25, 12},
 			map[string]interface{}{"a": "A1test", "a_a_a": -12.25, "aa_b_b": 12},
 		},
 		{
 			"When excluded fields exist",
-			new(StructView).Exclude("A", "AAA"),
+			new(structView).Exclude("A", "AAA"),
 			A1{"A1test", -12.25, 12},
 			map[string]interface{}{"AaBB": 12},
 		},
 		{
 			"When included fields exist",
-			new(StructView).Include("A", "AAA"),
+			new(structView).Include("A", "AAA"),
 			A1{"A1test", -12.25, 12},
 			map[string]interface{}{"A": "A1test", "AAA": -12.25},
 		},
 		{
 			"When both included and excluded fields exist",
-			new(StructView).Include("A", "AAA").Exclude("A"),
+			new(structView).Include("A", "AAA").Exclude("A"),
 			A1{"A1test", -12.25, 12},
 			map[string]interface{}{"AAA": -12.25},
 		},
@@ -62,37 +62,37 @@ func TestAutoSerializerStruct2Map(t *testing.T) {
 func TestAutoSerializerMap2Struct(t *testing.T) {
 	var testMap = []struct {
 		Scenario   string
-		Serializer *StructView
+		Serializer *structView
 		Sample     A1
 		Result     map[string]interface{}
 	}{
 		{
 			"When default configured",
-			new(StructView),
+			new(structView),
 			A1{"A1test", -12.25, 12},
 			map[string]interface{}{"A": "A1test", "AAA": -12.25, "AaBB": 12},
 		},
 		{
 			"When snake case requested",
-			&StructView{translateCase: true},
+			&structView{translateCase: true},
 			A1{"A1test", -12.25, 12},
 			map[string]interface{}{"a": "A1test", "a_a_a": -12.25, "aa_b_b": 12},
 		},
 		{
 			"When excluded fields exist",
-			new(StructView).Exclude("A", "AAA"),
+			new(structView).Exclude("A", "AAA"),
 			A1{"", 0, 12},
 			map[string]interface{}{"A": "A1test", "AAA": -12.25, "AaBB": 12},
 		},
 		{
 			"When included fields exist",
-			new(StructView).Include("A", "AAA"),
+			new(structView).Include("A", "AAA"),
 			A1{"A1test", -12.25, 0},
 			map[string]interface{}{"A": "A1test", "AAA": -12.25, "AaBB": 12},
 		},
 		{
 			"When both included and excluded fields exist",
-			new(StructView).Include("A", "AAA").Exclude("A"),
+			new(structView).Include("A", "AAA").Exclude("A"),
 			A1{"", -12.25, 0},
 			map[string]interface{}{"A": "A1test", "AAA": -12.25, "AaBB": 12},
 		},

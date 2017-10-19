@@ -1,10 +1,7 @@
 // @APIVersion 1.0.0
-// @Title Toptal sample project
-// @Description beego has a very cool tools to autogenerate documents for your API
-// @Contact astaxie@gmail.com
-// @TermsOfServiceUrl http://beego.me/
-// @License Apache 2.0
-// @LicenseUrl http://www.apache.org/licenses/LICENSE-2.0.html
+// @Title Toptal demo app (Run Keeper)
+// @Description This RunKeeper API allows you to manage users run data
+// @Contact me@ilyabiin.com
 package routers
 
 import (
@@ -15,9 +12,9 @@ import (
 
 func init() {
 	ns := beego.NewNamespace("/api/v1",
-		beego.NSNamespace("/permissions",
+		beego.NSNamespace("/user",
 			beego.NSInclude(
-				&controllers.PermissionsController{},
+				&controllers.UserController{},
 			),
 		),
 	)

@@ -1,9 +1,9 @@
-# Toptal sample project
+# Toptal demo app (Run Keeper)
 
 
 <a name="overview"></a>
 ## Overview
-beego has a very cool tools to autogenerate documents for your API
+This RunKeeper API allows you to manage users run data
 
 
 ### Version information
@@ -11,13 +11,7 @@ beego has a very cool tools to autogenerate documents for your API
 
 
 ### Contact information
-*Contact Email* : astaxie@gmail.com
-
-
-### License information
-*License* : Apache 2.0  
-*License URL* : http://www.apache.org/licenses/LICENSE-2.0.html  
-*Terms of service* : http://beego.me/
+*Contact Email* : me@ilyabiin.com
 
 
 ### URI scheme
@@ -26,7 +20,7 @@ beego has a very cool tools to autogenerate documents for your API
 
 ### Tags
 
-* permissions :  PermissionsController operations for Permissions
+* user :  UserController operations for User
 
 
 
@@ -35,145 +29,168 @@ beego has a very cool tools to autogenerate documents for your API
 <a name="paths"></a>
 ## Paths
 
-<a name="permissionscontroller-post"></a>
-### POST /permissions/
+<a name="usercontroller-post"></a>
+### POST /user/
 
 #### Description
-create Permissions
-
-
-#### Parameters
-
-|Type|Name|Description|Schema|
-|---|---|---|---|
-|**Body**|**body**  <br>*required*|body for Permissions content|[models.Permissions](#models-permissions)|
-
-
-#### Responses
-
-|HTTP Code|Description|Schema|
-|---|---|---|
-|**201**|{int} models.Permissions|No Content|
-|**403**|body is empty|No Content|
-
-
-#### Tags
-
-* permissions
-
-
-<a name="permissionscontroller-get-all"></a>
-### GET /permissions/
-
-#### Description
-get Permissions
-
-
-#### Parameters
-
-|Type|Name|Description|Schema|
-|---|---|---|---|
-|**Query**|**fields**  <br>*optional*|Fields returned. e.g. col1,col2 ...|string|
-|**Query**|**limit**  <br>*optional*|Limit the size of result set. Must be an integer|string|
-|**Query**|**offset**  <br>*optional*|Start position of result set. Must be an integer|string|
-|**Query**|**order**  <br>*optional*|Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...|string|
-|**Query**|**query**  <br>*optional*|Filter. e.g. col1:v1,col2:v2 ...|string|
-|**Query**|**sortby**  <br>*optional*|Sorted-by fields. e.g. col1,col2 ...|string|
+create new User, returns key and secret used to authorize
 
 
 #### Responses
 
 |HTTP Code|Schema|
 |---|---|
-|**200**|[models.Permissions](#models-permissions)|
-|**403**|No Content|
+|**201**|[models.UserCredentialsView](#models-usercredentialsview)|
 
 
 #### Tags
 
-* permissions
+* user
 
 
-<a name="permissionscontroller-get-one"></a>
-### GET /permissions/{id}
+<a name="usercontroller-get-all"></a>
+### GET /user/
 
 #### Description
-get Permissions by id
+Users Directory
 
 
 #### Parameters
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**id**  <br>*required*|The key for staticblock|string|
+|**Header**|**X-Request-Id**  <br>*required*|Access Token|string|
 
 
 #### Responses
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**||[models.Permissions](#models-permissions)|
-|**403**|:id is empty|No Content|
+|**200**||< [models.UserInfoView](#models-userinfoview) > array|
+|**401**|unauthorized|No Content|
+|**403**|forbidden|No Content|
 
 
 #### Tags
 
-* permissions
+* user
 
 
-<a name="permissionscontroller-put"></a>
-### PUT /permissions/{id}
+<a name="usercontroller-signin"></a>
+### POST /user/sign_in
 
 #### Description
-update the Permissions
+Use this method to receive Access Token which is required for API access
 
 
 #### Parameters
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**id**  <br>*required*|The id you want to update|string|
-|**Body**|**body**  <br>*required*|body for Permissions content|[models.Permissions](#models-permissions)|
+|**Body**|**body**  <br>*required*|Credentials to Sign In|[models.UserCredentialsView](#models-usercredentialsview)|
 
 
 #### Responses
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**||[models.Permissions](#models-permissions)|
-|**403**|:id is not int|No Content|
+|**200**||[models.UserAccessTokenView](#models-useraccesstokenview)|
+|**400**|bad request|No Content|
+|**401**|wrong credentials|No Content|
 
 
 #### Tags
 
-* permissions
+* user
 
 
-<a name="permissionscontroller-delete"></a>
-### DELETE /permissions/{id}
+<a name="usercontroller-get-one"></a>
+### GET /user/{uid}
 
 #### Description
-delete the Permissions
+get User
 
 
 #### Parameters
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Path**|**id**  <br>*required*|The id you want to delete|string|
+|**Header**|**X-Request-Id**  <br>*required*|Access Token|string|
+|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
 
 
 #### Responses
 
 |HTTP Code|Description|Schema|
 |---|---|---|
-|**200**|{string} delete success!|No Content|
-|**403**|id is empty|No Content|
+|**200**||[models.UserInfoView](#models-userinfoview)|
+|**401**|unauthorized|No Content|
+|**403**|forbidden|No Content|
 
 
 #### Tags
 
-* permissions
+* user
+
+
+<a name="usercontroller-delete"></a>
+### DELETE /user/{uid}
+
+#### Description
+delete the User
+
+
+#### Parameters
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Header**|**X-Request-Id**  <br>*required*|Access Token|string|
+|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+
+
+#### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**||[models.UserInfoView](#models-userinfoview)|
+|**400**|bad request (uid is missing or is not a number)|No Content|
+|**401**|unauthorized|No Content|
+|**403**|forbidden|No Content|
+
+
+#### Tags
+
+* user
+
+
+<a name="usercontroller-put"></a>
+### PUT /user/{uid}/credentials
+
+#### Description
+generate new User credentials
+
+
+#### Parameters
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Header**|**X-Request-Id**  <br>*required*|Access Token|string|
+|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+
+
+#### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**||[models.UserCredentialsView](#models-usercredentialsview)|
+|**400**|bad request (uid is missing or is not a number)|No Content|
+|**401**|unauthorized|No Content|
+|**403**|forbidden|No Content|
+
+
+#### Tags
+
+* user
 
 
 
@@ -181,14 +198,33 @@ delete the Permissions
 <a name="definitions"></a>
 ## Definitions
 
-<a name="models-permissions"></a>
-### models.Permissions
+<a name="models-useraccesstokenview"></a>
+### models.UserAccessTokenView
 
 |Name|Schema|
 |---|---|
-|**Description**  <br>*optional*|string|
-|**Id**  <br>*optional*|integer (int64)|
-|**Title**  <br>*optional*|string|
+|**access-token**  <br>*optional*|string|
+
+
+<a name="models-usercredentialsview"></a>
+### models.UserCredentialsView
+
+|Name|Schema|
+|---|---|
+|**id**  <br>*optional*|integer (int64)|
+|**key**  <br>*optional*|string|
+|**secret**  <br>*optional*|string|
+
+
+<a name="models-userinfoview"></a>
+### models.UserInfoView
+
+|Name|Schema|
+|---|---|
+|**created**  <br>*optional*|string (string)|
+|**id**  <br>*optional*|integer (int64)|
+|**key**  <br>*optional*|string|
+|**updated**  <br>*optional*|string (string)|
 
 
 

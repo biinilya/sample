@@ -1,144 +1,186 @@
 swagger: "2.0"
 info:
-  title: Toptal sample project
-  description: beego has a very cool tools to autogenerate documents for your API
+  title: Toptal demo app (Run Keeper)
+  description: This RunKeeper API allows you to manage users run data
   version: 1.0.0
-  termsOfService: http://beego.me/
   contact:
-    email: astaxie@gmail.com
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
+    email: me@ilyabiin.com
 basePath: /api/v1
 paths:
-  /permissions/:
+  /user/:
     get:
       tags:
-      - permissions
-      description: get Permissions
-      operationId: PermissionsController.Get All
+      - user
+      description: Users Directory
+      operationId: UserController.Get All
       parameters:
-      - in: query
-        name: query
-        description: Filter. e.g. col1:v1,col2:v2 ...
-        type: string
-      - in: query
-        name: fields
-        description: Fields returned. e.g. col1,col2 ...
-        type: string
-      - in: query
-        name: sortby
-        description: Sorted-by fields. e.g. col1,col2 ...
-        type: string
-      - in: query
-        name: order
-        description: Order corresponding to each sortby field, if single value, apply
-          to all sortby fields. e.g. desc,asc ...
-        type: string
-      - in: query
-        name: limit
-        description: Limit the size of result set. Must be an integer
-        type: string
-      - in: query
-        name: offset
-        description: Start position of result set. Must be an integer
+      - in: header
+        name: X-Request-Id
+        description: Access Token
+        required: true
         type: string
       responses:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Permissions'
+            type: array
+            items:
+              $ref: '#/definitions/models.UserInfoView'
+        "401":
+          description: unauthorized
         "403":
-          description: ""
+          description: forbidden
     post:
       tags:
-      - permissions
-      description: create Permissions
-      operationId: PermissionsController.Post
-      parameters:
-      - in: body
-        name: body
-        description: body for Permissions content
-        required: true
-        schema:
-          $ref: '#/definitions/models.Permissions'
+      - user
+      description: create new User, returns key and secret used to authorize
+      operationId: UserController.Post
       responses:
         "201":
-          description: '{int} models.Permissions'
-        "403":
-          description: body is empty
-  /permissions/{id}:
+          description: ""
+          schema:
+            $ref: '#/definitions/models.UserCredentialsView'
+  /user/{uid}:
     get:
       tags:
-      - permissions
-      description: get Permissions by id
-      operationId: PermissionsController.Get One
+      - user
+      description: get User
+      operationId: UserController.Get One
       parameters:
+      - in: header
+        name: X-Request-Id
+        description: Access Token
+        required: true
+        type: string
       - in: path
-        name: id
-        description: The key for staticblock
+        name: uid
+        description: User ID
         required: true
-        type: string
-      responses:
-        "200":
-          description: ""
-          schema:
-            $ref: '#/definitions/models.Permissions'
-        "403":
-          description: :id is empty
-    put:
-      tags:
-      - permissions
-      description: update the Permissions
-      operationId: PermissionsController.Put
-      parameters:
-      - in: path
-        name: id
-        description: The id you want to update
-        required: true
-        type: string
-      - in: body
-        name: body
-        description: body for Permissions content
-        required: true
-        schema:
-          $ref: '#/definitions/models.Permissions'
-      responses:
-        "200":
-          description: ""
-          schema:
-            $ref: '#/definitions/models.Permissions'
-        "403":
-          description: :id is not int
-    delete:
-      tags:
-      - permissions
-      description: delete the Permissions
-      operationId: PermissionsController.Delete
-      parameters:
-      - in: path
-        name: id
-        description: The id you want to delete
-        required: true
-        type: string
-      responses:
-        "200":
-          description: '{string} delete success!'
-        "403":
-          description: id is empty
-definitions:
-  models.Permissions:
-    title: Permissions
-    type: object
-    properties:
-      Description:
-        type: string
-      Id:
         type: integer
         format: int64
-      Title:
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.UserInfoView'
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
+    delete:
+      tags:
+      - user
+      description: delete the User
+      operationId: UserController.Delete
+      parameters:
+      - in: header
+        name: X-Request-Id
+        description: Access Token
+        required: true
         type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.UserInfoView'
+        "400":
+          description: bad request (uid is missing or is not a number)
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
+  /user/{uid}/credentials:
+    put:
+      tags:
+      - user
+      description: generate new User credentials
+      operationId: UserController.Put
+      parameters:
+      - in: header
+        name: X-Request-Id
+        description: Access Token
+        required: true
+        type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.UserCredentialsView'
+        "400":
+          description: bad request (uid is missing or is not a number)
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
+  /user/sign_in:
+    post:
+      tags:
+      - user
+      description: Use this method to receive Access Token which is required for API
+        access
+      operationId: UserController.SignIn
+      parameters:
+      - in: body
+        name: body
+        description: Credentials to Sign In
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserCredentialsView'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.UserAccessTokenView'
+        "400":
+          description: bad request
+        "401":
+          description: wrong credentials
+definitions:
+  models.UserAccessTokenView:
+    title: UserAccessTokenView
+    type: object
+    properties:
+      access-token:
+        type: string
+  models.UserCredentialsView:
+    title: UserCredentialsView
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      key:
+        type: string
+      secret:
+        type: string
+  models.UserInfoView:
+    title: UserInfoView
+    type: object
+    properties:
+      created:
+        type: string
+        format: string
+      id:
+        type: integer
+        format: int64
+      key:
+        type: string
+      updated:
+        type: string
+        format: string
 tags:
-- name: permissions
+- name: user
   description: |2
-     PermissionsController operations for Permissions
+     UserController operations for User

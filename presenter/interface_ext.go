@@ -5,7 +5,7 @@ import (
 )
 
 type interfaceExt struct {
-	*StructView
+	*structView
 }
 
 // ConvertExt converts a value into a simpler interface for easy encoding e.g. convert time.Time to int64.
@@ -16,7 +16,7 @@ func (ie interfaceExt) ConvertExt(v interface{}) interface{} {
 	if vType.Kind() == reflect.Ptr {
 		v = reflect.ValueOf(v).Elem().Interface()
 	}
-	return ie.StructView.Struct2Map(v)
+	return ie.structView.Struct2Map(v)
 }
 
 // UpdateExt updates a value from a simpler interface for easy decoding e.g. convert int64 to time.Time.
@@ -26,5 +26,5 @@ func (ie interfaceExt) UpdateExt(dst interface{}, src interface{}) {
 	for k, v := range srcMap {
 		srcStrMap[k.(string)] = v
 	}
-	ie.StructView.Map2Struct(srcStrMap, dst)
+	ie.structView.Map2Struct(srcStrMap, dst)
 }

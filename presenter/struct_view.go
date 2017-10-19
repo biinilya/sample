@@ -6,19 +6,19 @@ import (
 	"github.com/serenize/snaker"
 )
 
-type StructView struct {
+type structView struct {
 	translateCase bool
 
 	include map[string]bool
 	exclude map[string]bool
 }
 
-func (as *StructView) TranslateCase() *StructView {
+func (as *structView) TranslateCase() *structView {
 	as.translateCase = true
 	return as
 }
 
-func (as *StructView) Include(list ...string) *StructView {
+func (as *structView) Include(list ...string) *structView {
 	as.include = make(map[string]bool)
 	for _, l := range list {
 		as.include[l] = true
@@ -26,7 +26,7 @@ func (as *StructView) Include(list ...string) *StructView {
 	return as
 }
 
-func (as *StructView) Exclude(list ...string) *StructView {
+func (as *structView) Exclude(list ...string) *structView {
 	as.exclude = make(map[string]bool)
 	for _, l := range list {
 		as.exclude[l] = true
@@ -34,21 +34,21 @@ func (as *StructView) Exclude(list ...string) *StructView {
 	return as
 }
 
-func (as *StructView) camelToSnake(key string) string {
+func (as *structView) camelToSnake(key string) string {
 	if !as.translateCase {
 		return key
 	}
 	return snaker.CamelToSnake(key)
 }
 
-func (as *StructView) snakeToCamel(key string) string {
+func (as *structView) snakeToCamel(key string) string {
 	if !as.translateCase {
 		return key
 	}
 	return snaker.SnakeToCamel(key)
 }
 
-func (as *StructView) Struct2Map(model interface{}) map[string]interface{} {
+func (as *structView) Struct2Map(model interface{}) map[string]interface{} {
 	val := reflect.ValueOf(model)
 
 	m := make(map[string]interface{})
@@ -64,7 +64,7 @@ func (as *StructView) Struct2Map(model interface{}) map[string]interface{} {
 	return m
 }
 
-func (as *StructView) Map2Struct(in map[string]interface{}, model interface{}) {
+func (as *structView) Map2Struct(in map[string]interface{}, model interface{}) {
 	val := reflect.ValueOf(model).Elem()
 	valType := reflect.TypeOf(model).Elem()
 	for key, in_val_iface := range in {
@@ -79,4 +79,8 @@ func (as *StructView) Map2Struct(in map[string]interface{}, model interface{}) {
 			}
 		}
 	}
+}
+
+func StructView() *structView {
+	return &structView{}
 }

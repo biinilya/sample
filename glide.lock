@@ -1,5 +1,5 @@
-hash: ff95802cb0183eab42b2f075eead9cec9339df70176685765bfb3e5471f56e6b
-updated: 2017-10-19T15:52:51.309263+03:00
+hash: 94493e1bd0a9fd54553401d9ecb24f629f487dc97abf33458bef7da7713d11bb
+updated: 2017-10-23T00:21:52.991654+03:00
 imports:
 - name: github.com/astaxie/beego
   version: d96289a81bf67728cff7a19b067aaecc65a62ec6
@@ -18,13 +18,21 @@ imports:
   version: e42267488fe361b9dc034be7a6bffef5b195bceb
   subpackages:
   - oid
+- name: github.com/satori/go.uuid
+  version: 879c5887cd475cd7864858769793b2ceb0d44feb
 - name: github.com/serenize/snaker
   version: c7a77c38c398a5468cac9579c3b2b1de22fb4da6
 - name: github.com/ugorji/go
-  version: c3953defa8f202d85a6d73eead7b77073bf5701a
+  version: bdcc60b419d136a85cdf2e7cbcac34b3f1cd6e57
   subpackages:
   - codec
 testImports:
+- name: github.com/beego/bee
+  version: 1a79d6dcca0cfa714895f86f62ed9061e55e4914
+- name: github.com/golang/mock
+  version: 13f360950a79f5864a972c786a10a50e44b69541
+  subpackages:
+  - mockgen
 - name: github.com/gopherjs/gopherjs
   version: e34a5cd6a1bc7c4fde759f2d3039852fc68b5fcc
   subpackages:

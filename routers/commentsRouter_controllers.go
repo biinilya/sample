@@ -7,7 +7,7 @@ import (
 
 func init() {
 
-	beego.GlobalControllerRouter["toptal/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["toptal/controllers:PermissionsController"],
+	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "Post",
 			Router:           `/`,
@@ -15,7 +15,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["toptal/controllers:PermissionsController"],
+	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "GetAll",
 			Router:           `/`,
@@ -23,27 +23,35 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["toptal/controllers:PermissionsController"],
+	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "GetOne",
-			Router:           `/:id`,
+			Router:           `/:uid`,
 			AllowHTTPMethods: []string{"get"},
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["toptal/controllers:PermissionsController"],
+	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+		beego.ControllerComments{
+			Method:           "Delete",
+			Router:           `/:uid`,
+			AllowHTTPMethods: []string{"delete"},
+			MethodParams:     param.Make(),
+			Params:           nil})
+
+	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "Put",
-			Router:           `/:id`,
+			Router:           `/:uid/credentials`,
 			AllowHTTPMethods: []string{"put"},
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["toptal/controllers:PermissionsController"],
+	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
 		beego.ControllerComments{
-			Method:           "Delete",
-			Router:           `/:id`,
-			AllowHTTPMethods: []string{"delete"},
+			Method:           "SignIn",
+			Router:           `/sign_in`,
+			AllowHTTPMethods: []string{"post"},
 			MethodParams:     param.Make(),
 			Params:           nil})
 

@@ -10,6 +10,8 @@ import (
 )
 
 func main() {
+	orm.Debug = true
+
 	orm.RegisterDriver("postgres", orm.DRPostgres)
 	orm.RegisterDataBase(
 		"default",
@@ -21,5 +23,15 @@ func main() {
 		beego.BConfig.WebConfig.DirectoryIndex = true
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
+
+	//ns := beego.NewNamespace("/api/v1",
+	//	beego.NSNamespace("/user",
+	//		beego.NSInclude(
+	//			&controllers.UserController{},
+	//		),
+	//	),
+	//)
+	//beego.AddNamespace(ns)
+
 	beego.Run()
 }
