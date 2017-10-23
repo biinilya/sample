@@ -15,7 +15,7 @@ paths:
       operationId: UserController.Get All
       parameters:
       - in: header
-        name: X-Request-Id
+        name: X-Access-Token
         description: Access Token
         required: true
         type: string
@@ -48,7 +48,7 @@ paths:
       operationId: UserController.Get One
       parameters:
       - in: header
-        name: X-Request-Id
+        name: X-Access-Token
         description: Access Token
         required: true
         type: string
@@ -74,7 +74,7 @@ paths:
       operationId: UserController.Delete
       parameters:
       - in: header
-        name: X-Request-Id
+        name: X-Access-Token
         description: Access Token
         required: true
         type: string
@@ -103,7 +103,7 @@ paths:
       operationId: UserController.Put
       parameters:
       - in: header
-        name: X-Request-Id
+        name: X-Access-Token
         description: Access Token
         required: true
         type: string

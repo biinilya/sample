@@ -74,7 +74,7 @@ func (c *UserController) SignIn() {
 // GetOne ...
 // @Title Get One
 // @Description get User
-// @Param	X-Request-Id		header 	string	true		"Access Token"
+// @Param	X-Access-Token		header 	string	true		"Access Token"
 // @Param	uid		path 	uint64	true		"User ID"
 // @Success 200 {object} models.UserInfoView
 // @Failure 401 unauthorized
@@ -90,7 +90,7 @@ func (c *UserController) GetOne() {
 // Put ...
 // @Title Put
 // @Description generate new User credentials
-// @Param	X-Request-Id		header 	string	true		"Access Token"
+// @Param	X-Access-Token		header 	string	true		"Access Token"
 // @Param	uid		path 	uint64	true		"User ID"
 // @Success 200 {object} models.UserCredentialsView
 // @Failure 400 bad request (uid is missing or is not a number)
@@ -120,7 +120,7 @@ func (c *UserController) Put() {
 // GetAll ...
 // @Title Get All
 // @Description Users Directory
-// @Param	X-Request-Id		header 	string	true		"Access Token"
+// @Param	X-Access-Token		header 	string	true		"Access Token"
 // @Success 200 {object} []models.UserInfoView
 // @Failure 401 unauthorized
 // @Failure 403 forbidden
@@ -141,7 +141,7 @@ func (c *UserController) GetAll() {
 // Delete ...
 // @Title Delete
 // @Description delete the User
-// @Param	X-Request-Id		header 	string	true		"Access Token"
+// @Param	X-Access-Token		header 	string	true		"Access Token"
 // @Param	uid		path 	uint64	true		"User ID"
 // @Success 200 {object} models.UserInfoView
 // @Failure 400 bad request (uid is missing or is not a number)

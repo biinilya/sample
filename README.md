@@ -59,7 +59,7 @@ Users Directory
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Request-Id**  <br>*required*|Access Token|string|
+|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
 
 
 #### Responses
@@ -115,7 +115,7 @@ get User
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Request-Id**  <br>*required*|Access Token|string|
+|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
 |**Path**|**uid**  <br>*required*|User ID|integer (int64)|
 
 
@@ -144,7 +144,7 @@ delete the User
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Request-Id**  <br>*required*|Access Token|string|
+|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
 |**Path**|**uid**  <br>*required*|User ID|integer (int64)|
 
 
@@ -174,7 +174,7 @@ generate new User credentials
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Request-Id**  <br>*required*|Access Token|string|
+|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
 |**Path**|**uid**  <br>*required*|User ID|integer (int64)|
 
 
