@@ -51,12 +51,14 @@ func TestAutoSerializerStruct2Map(t *testing.T) {
 		},
 	}
 
-	for _, test := range testMap {
-		var scenario, serializer, sample, result = test.Scenario, test.Serializer, test.Sample, test.Result
-		Convey(scenario, t, func() {
-			So(serializer.Struct2Map(sample), ShouldResemble, result)
-		})
-	}
+	Convey("AutoSerializerStruct2Map", t, func() {
+		for _, test := range testMap {
+			var scenario, serializer, sample, result = test.Scenario, test.Serializer, test.Sample, test.Result
+			Convey(scenario, func() {
+				So(serializer.Struct2Map(sample), ShouldResemble, result)
+			})
+		}
+	})
 }
 
 func TestAutoSerializerMap2Struct(t *testing.T) {
@@ -98,12 +100,14 @@ func TestAutoSerializerMap2Struct(t *testing.T) {
 		},
 	}
 
-	for _, test := range testMap {
-		var scenario, serializer, sample, result = test.Scenario, test.Serializer, test.Sample, test.Result
-		Convey(scenario, t, func() {
-			var sampleRes A1
-			serializer.Map2Struct(result, &sampleRes)
-			So(sample, ShouldResemble, sampleRes)
-		})
-	}
+	Convey("AutoSerializerMap2Struct", t, func() {
+		for _, test := range testMap {
+			var scenario, serializer, sample, result = test.Scenario, test.Serializer, test.Sample, test.Result
+			Convey(scenario, func() {
+				var sampleRes A1
+				serializer.Map2Struct(result, &sampleRes)
+				So(sample, ShouldResemble, sampleRes)
+			})
+		}
+	})
 }

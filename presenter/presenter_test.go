@@ -33,17 +33,20 @@ func TestJsonSerializerEncode(t *testing.T) {
 		},
 	}
 
-	for _, test := range testMap {
-		var scenario, sample, result = test.Scenario, test.Sample, test.Result
-
-		var data, dataErr = json.Marshal(ser.AsJson(sample))
-		Convey(scenario+"no errors occured", t, func() {
-			So(dataErr, ShouldEqual, nil)
-		})
-		Convey(scenario, t, func() {
-			So(string(data), ShouldEqual, result)
-		})
-	}
+	Convey("JsonSerializerEncode", t, func() {
+		for _, test := range testMap {
+			var scenario, sample, result = test.Scenario, test.Sample, test.Result
+			Convey(scenario, func() {
+				var data, dataErr = json.Marshal(ser.AsJson(sample))
+				Convey("no errors occured", func() {
+					So(dataErr, ShouldEqual, nil)
+				})
+				Convey("data matches", func() {
+					So(string(data), ShouldEqual, result)
+				})
+			})
+		}
+	})
 }
 
 func TestJsonSerializerDecode(t *testing.T) {
@@ -51,32 +54,34 @@ func TestJsonSerializerDecode(t *testing.T) {
 
 	var test = func(scenario string, js string, emptyData interface{}, sample interface{}) {
 		var dataErr = json.Unmarshal([]byte(js), ser.AsJson(emptyData))
-		Convey(scenario+"no errors occured", t, func() {
+		Convey(scenario+"no errors occured", func() {
 			So(dataErr, ShouldEqual, nil)
 		})
-		Convey(scenario, t, func() {
+		Convey(scenario, func() {
 			So(emptyData, ShouldResemble, sample)
 		})
 	}
 
-	test(
-		"When simple struct deserialize",
-		`{"a":"test1"}`,
-		&A1{},
-		&A1{A: "test1"},
-	)
+	Convey("JsonSerializerDecode", t, func() {
+		test(
+			"When simple struct deserialize",
+			`{"a":"test1"}`,
+			&A1{},
+			&A1{A: "test1"},
+		)
 
-	test(
-		"When nested struct deserialize",
-		`{"xxx":{"a":"test1"}}`,
-		map[string]A1{},
-		map[string]A1{"xxx": {A: "test1"}},
-	)
+		test(
+			"When nested struct deserialize",
+			`{"xxx":{"a":"test1"}}`,
+			map[string]A1{},
+			map[string]A1{"xxx": {A: "test1"}},
+		)
 
-	test(
-		"When nested pointer struct deserialize",
-		`{"xxx":{"a":"test1"}}`,
-		map[string]*A1{},
-		map[string]*A1{"xxx": {A: "test1"}},
-	)
+		test(
+			"When nested pointer struct deserialize",
+			`{"xxx":{"a":"test1"}}`,
+			map[string]*A1{},
+			map[string]*A1{"xxx": {A: "test1"}},
+		)
+	})
 }

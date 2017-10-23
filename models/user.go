@@ -90,6 +90,9 @@ func (u *User) LoadById(o orm.Ormer, id uint64) (opErr error) {
 }
 
 func (u *User) Delete(o orm.Ormer) (opErr error) {
+	if _, opErr = o.QueryM2M(u, "Permissions").Clear(); opErr == nil {
+		u.Permissions = []*Permission{}
+	}
 	if _, opErr = o.QueryTable(u).Filter("Id", u.Id).Delete(); opErr != nil {
 		return
 	}

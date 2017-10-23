@@ -16,6 +16,14 @@ func FromJson(data []byte, v interface{}) interface{} {
 	return v
 }
 
+func ToJson(v interface{}) []byte {
+	if data, jsErr := json.Marshal(v); jsErr != nil {
+		panic(jsErr)
+	} else {
+		return data
+	}
+}
+
 func BeegoCall(method, url string, body io.Reader) *httptest.ResponseRecorder {
 	return BeegoCallWithHeader(method, url, body, make(http.Header))
 }

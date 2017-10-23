@@ -149,7 +149,7 @@ func (c *UserController) GetAll() {
 // @Failure 403 forbidden
 // @router /:uid [delete]
 func (c *UserController) Delete() {
-	var uid, uidErr = c.GetUint64("uid")
+	var uid, uidErr = c.GetUint64(":uid")
 	if uidErr != nil {
 		c.Abort("400")
 	}
