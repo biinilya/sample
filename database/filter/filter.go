@@ -7,10 +7,11 @@
 package main
 
 import (
+	"errors"
 	"fmt"
-
 	"strconv"
 
+	"github.com/astaxie/beego/orm"
 	"github.com/emirpasic/gods/stacks"
 	"github.com/emirpasic/gods/stacks/linkedliststack"
 )
@@ -44,10 +45,14 @@ type Expression struct {
 	identifier string
 	comparator Comprator
 	parameter  interface{}
+	fieldMap   map[string]string
+	fieldErr   error
 }
 
-func (e *Expression) Init() {
+func (e *Expression) Init(fieldMap map[string]string) {
 	e.opStack = linkedliststack.New()
+	e.fieldMap = fieldMap
+	e.fieldErr = nil
 }
 
 func (e *Expression) AddOperator2(operator Operator) {
@@ -69,6 +74,10 @@ func (e *Expression) AddOperator2(operator Operator) {
 }
 
 func (e *Expression) AddOperator1(operator Operator) {
+	if e.fieldErr != nil {
+		return
+	}
+
 	var opS Operation
 	if op, ok := e.opStack.Pop(); ok {
 		opS = op.(Operation)
@@ -82,16 +91,31 @@ func (e *Expression) AddOperator1(operator Operator) {
 }
 
 func (e *Expression) AddComparator(comparator Comprator) {
+	if e.fieldErr != nil {
+		return
+	}
+
 	e.comparator = comparator
 }
 
 func (e *Expression) AddIdentifier(identifier string) {
+	if e.fieldErr != nil {
+		return
+	}
+
 	e.identifier = identifier
+	if _, found := e.fieldMap[identifier]; !found {
+		e.fieldErr = errors.New(fmt.Sprintf("Unknown field <%s>", identifier))
+	}
 }
 
 func (e *Expression) AddParameter(t ParameterType, parameter string) {
+	if e.fieldErr != nil {
+		return
+	}
+
 	var op Operation
-	op.Statement = fmt.Sprintf(`"%s" %s ?`, e.identifier, e.comparator)
+	op.Statement = fmt.Sprintf(`"%s" %s ?::%s`, e.identifier, e.comparator, e.fieldMap[e.identifier])
 
 	switch t {
 	case TypeInt:
@@ -108,12 +132,37 @@ func (e *Expression) AddParameter(t ParameterType, parameter string) {
 	e.opStack.Push(op)
 }
 
-func (e *Expression) Render() (string, []interface{}) {
+func (e *Expression) Render() (string, []interface{}, error) {
+	if e.fieldErr != nil {
+		return "", nil, e.fieldErr
+	}
+
 	var opS Operation
 	if op, ok := e.opStack.Peek(); ok {
 		opS = op.(Operation)
 	} else {
 		panic("Broken operation stack")
 	}
-	return opS.Statement, opS.Parameters
+	return opS.Statement, opS.Parameters, nil
+}
+
+func ApplyFilter(
+	fieldMap map[string]string,
+	rawQ string,
+	q orm.QuerySeter,
+) (filtered orm.QuerySeter, err error) {
+	filter := &Filter{}
+	filter.Buffer = rawQ
+	filter.Init()
+	filter.Expression.Init(fieldMap)
+	if filterErr := filter.Parse(); filterErr != nil {
+		return q, filterErr
+	}
+
+	filter.Execute()
+	var qS, qA, qErr = filter.Render()
+	if qErr != nil {
+		return q, qErr
+	}
+	return q.Filter(qS, qA...), nil
 }
