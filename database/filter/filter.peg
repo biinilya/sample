@@ -1,0 +1,37 @@
+# Copyright 2010 The Go Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+package main
+
+type Filter Peg {
+ Expression
+}
+
+e <- sp e1 !.
+e1 <- e2 ( and e2 { p.AddOperator2(OpAnd) } / or e2 { p.AddOperator2(OpOr) } )*
+e2 <- not value { p.AddOperator1(OpNot) } / value
+value <- expression sp / open e1 close
+
+and <- 'AND' sp
+or <- 'OR' sp
+not <- 'NOT' sp
+
+open <- '(' sp
+close <- ')' sp
+
+gt <- '>' { p.AddComparator(CmpGt) }
+gte <- '>=' { p.AddComparator(CmpGte) }
+lt <- '<' { p.AddComparator(CmpLt) }
+lte <- '<=' { p.AddComparator(CmpLte) }
+eq <- '=' { p.AddComparator(CmpEq) }
+
+quote <- '\''
+
+expression <- (identifier sp comparator sp parameter)
+comparator <- gt / gte / lt / lte / eq
+identifier <- <[a-zA-Z][a-zA-Z0-9_]*> { p.AddIdentifier(buffer[begin:end]) }
+p_string <- quote <[^']+> quote { p.AddParameter(TypeString, buffer[begin:end]) }
+p_number <- <[0-9]+> { p.AddParameter(TypeInt, buffer[begin:end]) }
+parameter <- p_string / p_number
+sp <- ( ' ' / '\t' )*
