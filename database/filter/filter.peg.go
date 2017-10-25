@@ -44,10 +44,11 @@ const (
 	ruleAction5
 	ruleAction6
 	ruleAction7
-	rulePegText
 	ruleAction8
+	rulePegText
 	ruleAction9
 	ruleAction10
+	ruleAction11
 )
 
 var rul3s = [...]string{
@@ -82,10 +83,11 @@ var rul3s = [...]string{
 	"Action5",
 	"Action6",
 	"Action7",
-	"PegText",
 	"Action8",
+	"PegText",
 	"Action9",
 	"Action10",
+	"Action11",
 }
 
 type token32 struct {
@@ -197,23 +199,23 @@ func (t *tokens32) Tokens() []token32 {
 	return t.tree
 }
 
-type Filter struct {
-	Expression
+type FilterPeg struct {
+	AST
 
 	Buffer string
 	buffer []rune
-	rules  [35]func() bool
+	rules  [36]func() bool
 	parse  func(rule ...int) error
 	reset  func()
 	Pretty bool
 	tokens32
 }
 
-func (p *Filter) Parse(rule ...int) error {
+func (p *FilterPeg) Parse(rule ...int) error {
 	return p.parse(rule...)
 }
 
-func (p *Filter) Reset() {
+func (p *FilterPeg) Reset() {
 	p.reset()
 }
 
@@ -249,7 +251,7 @@ search:
 }
 
 type parseError struct {
-	p   *Filter
+	p   *FilterPeg
 	max token32
 }
 
@@ -277,7 +279,7 @@ func (e *parseError) Error() string {
 	return error
 }
 
-func (p *Filter) PrintSyntaxTree() {
+func (p *FilterPeg) PrintSyntaxTree() {
 	if p.Pretty {
 		p.tokens32.PrettyPrintSyntaxTree(p.Buffer)
 	} else {
@@ -285,7 +287,7 @@ func (p *Filter) PrintSyntaxTree() {
 	}
 }
 
-func (p *Filter) Execute() {
+func (p *FilterPeg) Execute() {
 	buffer, _buffer, text, begin, end := p.Buffer, p.buffer, "", 0, 0
 	for _, token := range p.Tokens() {
 		switch token.pegRule {
@@ -295,11 +297,11 @@ func (p *Filter) Execute() {
 			text = string(_buffer[begin:end])
 
 		case ruleAction0:
-			p.AddOperator2(OpAnd)
+			p.AddOperator(OpAnd)
 		case ruleAction1:
-			p.AddOperator2(OpOr)
+			p.AddOperator(OpOr)
 		case ruleAction2:
-			p.AddOperator1(OpNot)
+			p.AddOperator(OpNot)
 		case ruleAction3:
 			p.AddComparator(CmpGt)
 		case ruleAction4:
@@ -311,18 +313,20 @@ func (p *Filter) Execute() {
 		case ruleAction7:
 			p.AddComparator(CmpEq)
 		case ruleAction8:
-			p.AddIdentifier(buffer[begin:end])
+			p.AddExpression()
 		case ruleAction9:
-			p.AddParameter(TypeString, buffer[begin:end])
+			p.AddIdentifier(buffer[begin:end])
 		case ruleAction10:
-			p.AddParameter(TypeInt, buffer[begin:end])
+			p.AddArgument(TypeString, buffer[begin:end])
+		case ruleAction11:
+			p.AddArgument(TypeInt, buffer[begin:end])
 
 		}
 	}
 	_, _, _, _, _ = buffer, _buffer, text, begin, end
 }
 
-func (p *Filter) Init() {
+func (p *FilterPeg) Init() {
 	var (
 		max                  token32
 		position, tokenIndex uint32
@@ -606,7 +610,7 @@ func (p *Filter) Init() {
 								add(rulePegText, position25)
 							}
 							{
-								add(ruleAction8, position)
+								add(ruleAction9, position)
 							}
 							add(ruleidentifier, position24)
 						}
@@ -754,7 +758,7 @@ func (p *Filter) Init() {
 										goto l49
 									}
 									{
-										add(ruleAction9, position)
+										add(ruleAction10, position)
 									}
 									add(rulep_string, position50)
 								}
@@ -783,13 +787,16 @@ func (p *Filter) Init() {
 										add(rulePegText, position58)
 									}
 									{
-										add(ruleAction10, position)
+										add(ruleAction11, position)
 									}
 									add(rulep_number, position57)
 								}
 							}
 						l48:
 							add(ruleparameter, position47)
+						}
+						{
+							add(ruleAction8, position)
 						}
 						add(ruleexpression, position23)
 					}
@@ -800,7 +807,7 @@ func (p *Filter) Init() {
 				l22:
 					position, tokenIndex = position21, tokenIndex21
 					{
-						position62 := position
+						position63 := position
 						if buffer[position] != rune('(') {
 							goto l19
 						}
@@ -808,13 +815,13 @@ func (p *Filter) Init() {
 						if !_rules[rulesp]() {
 							goto l19
 						}
-						add(ruleopen, position62)
+						add(ruleopen, position63)
 					}
 					if !_rules[rulee1]() {
 						goto l19
 					}
 					{
-						position63 := position
+						position64 := position
 						if buffer[position] != rune(')') {
 							goto l19
 						}
@@ -822,7 +829,7 @@ func (p *Filter) Init() {
 						if !_rules[rulesp]() {
 							goto l19
 						}
-						add(ruleclose, position63)
+						add(ruleclose, position64)
 					}
 				}
 			l21:
@@ -855,67 +862,67 @@ func (p *Filter) Init() {
 		nil,
 		/* 14 quote <- <'\''> */
 		func() bool {
-			position74, tokenIndex74 := position, tokenIndex
+			position75, tokenIndex75 := position, tokenIndex
 			{
-				position75 := position
+				position76 := position
 				if buffer[position] != rune('\'') {
-					goto l74
+					goto l75
 				}
 				position++
-				add(rulequote, position75)
+				add(rulequote, position76)
 			}
 			return true
-		l74:
-			position, tokenIndex = position74, tokenIndex74
+		l75:
+			position, tokenIndex = position75, tokenIndex75
 			return false
 		},
-		/* 15 expression <- <(identifier sp comparator sp parameter)> */
+		/* 15 expression <- <(identifier sp comparator sp parameter Action8)> */
 		nil,
 		/* 16 comparator <- <(gt / lt / ((&('=') eq) | (&('<') lte) | (&('>') gte)))> */
 		nil,
-		/* 17 identifier <- <(<(([a-z] / [A-Z]) ((&('_') '_') | (&('0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9') [0-9]) | (&('A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z') [A-Z]) | (&('a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z') [a-z]))*)> Action8)> */
+		/* 17 identifier <- <(<(([a-z] / [A-Z]) ((&('_') '_') | (&('0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9') [0-9]) | (&('A' | 'B' | 'C' | 'D' | 'E' | 'F' | 'G' | 'H' | 'I' | 'J' | 'K' | 'L' | 'M' | 'N' | 'O' | 'P' | 'Q' | 'R' | 'S' | 'T' | 'U' | 'V' | 'W' | 'X' | 'Y' | 'Z') [A-Z]) | (&('a' | 'b' | 'c' | 'd' | 'e' | 'f' | 'g' | 'h' | 'i' | 'j' | 'k' | 'l' | 'm' | 'n' | 'o' | 'p' | 'q' | 'r' | 's' | 't' | 'u' | 'v' | 'w' | 'x' | 'y' | 'z') [a-z]))*)> Action9)> */
 		nil,
-		/* 18 p_string <- <(quote <(!'\'' .)+> quote Action9)> */
+		/* 18 p_string <- <(quote <(!'\'' .)+> quote Action10)> */
 		nil,
-		/* 19 p_number <- <(<[0-9]+> Action10)> */
+		/* 19 p_number <- <(<[0-9]+> Action11)> */
 		nil,
 		/* 20 parameter <- <(p_string / p_number)> */
 		nil,
 		/* 21 sp <- <(' ' / '\t')*> */
 		func() bool {
 			{
-				position83 := position
-			l84:
+				position84 := position
+			l85:
 				{
-					position85, tokenIndex85 := position, tokenIndex
+					position86, tokenIndex86 := position, tokenIndex
 					{
-						position86, tokenIndex86 := position, tokenIndex
+						position87, tokenIndex87 := position, tokenIndex
 						if buffer[position] != rune(' ') {
-							goto l87
+							goto l88
 						}
 						position++
-						goto l86
-					l87:
-						position, tokenIndex = position86, tokenIndex86
+						goto l87
+					l88:
+						position, tokenIndex = position87, tokenIndex87
 						if buffer[position] != rune('\t') {
-							goto l85
+							goto l86
 						}
 						position++
 					}
+				l87:
+					goto l85
 				l86:
-					goto l84
-				l85:
-					position, tokenIndex = position85, tokenIndex85
+					position, tokenIndex = position86, tokenIndex86
 				}
-				add(rulesp, position83)
+				add(rulesp, position84)
 			}
 			return true
 		},
-		/* 23 Action0 <- <{ p.AddOperator2(OpAnd) }> */
+		/* 23 Action0 <- <{ p.AddOperator(OpAnd) }> */
 		nil,
-		/* 24 Action1 <- <{ p.AddOperator2(OpOr) }> */
+		/* 24 Action1 <- <{ p.AddOperator(OpOr) }> */
 		nil,
-		/* 25 Action2 <- <{ p.AddOperator1(OpNot) }> */
+		/* 25 Action2 <- <{ p.AddOperator(OpNot) }> */
 		nil,
 		/* 26 Action3 <- <{ p.AddComparator(CmpGt) }> */
 		nil,
@@ -927,12 +934,14 @@ func (p *Filter) Init() {
 		nil,
 		/* 30 Action7 <- <{ p.AddComparator(CmpEq) }> */
 		nil,
+		/* 31 Action8 <- <{ p.AddExpression() }> */
 		nil,
-		/* 32 Action8 <- <{ p.AddIdentifier(buffer[begin:end]) }> */
 		nil,
-		/* 33 Action9 <- <{ p.AddParameter(TypeString, buffer[begin:end]) }> */
+		/* 33 Action9 <- <{ p.AddIdentifier(buffer[begin:end]) }> */
 		nil,
-		/* 34 Action10 <- <{ p.AddParameter(TypeInt, buffer[begin:end]) }> */
+		/* 34 Action10 <- <{ p.AddArgument(TypeString, buffer[begin:end]) }> */
+		nil,
+		/* 35 Action11 <- <{ p.AddArgument(TypeInt, buffer[begin:end]) }> */
 		nil,
 	}
 	p.rules = _rules

@@ -8,19 +8,15 @@ import (
 )
 
 func TestCalculator(t *testing.T) {
-	var fieldMap = map[string]string{
-		"created_at": "DATE",
-		"value":      "INTEGER",
-		"death":      "BIGINT",
-	}
-	filter := &Filter{}
+	filter := &FilterPeg{}
 	filter.Init()
-	filter.Expression.Init(fieldMap)
 
 	var testExpression = func(expression string, qString string, qArgs ...interface{}) {
 		Convey(fmt.Sprintf("%s -> %s", expression, qString), func() {
 			filter.Buffer = expression
 			filter.Reset()
+			filter.AST.Init()
+
 			filterErr := filter.Parse()
 			Convey("Parsed without errors", func() {
 				So(filterErr, ShouldBeNil)
@@ -47,12 +43,13 @@ func TestCalculator(t *testing.T) {
 		Convey(fmt.Sprintf("[Restricted] %s", expression), func() {
 			filter.Buffer = expression
 			filter.Reset()
+			filter.AST.Init()
 			filterErr := filter.Parse()
 			Convey("Parsed without errors", func() {
 				So(filterErr, ShouldBeNil)
 			})
 			filter.Execute()
-			var _, _, qErr = filter.Render()
+			var _, _, qErr = filter.Render("created_at", "value", "death")
 			Convey("Result Query String Is Valid", func() {
 				So(qErr, ShouldNotBeNil)
 			})
@@ -72,32 +69,32 @@ func TestCalculator(t *testing.T) {
 
 	Convey("Our calculator should work", t, func() {
 		testExpression(
-			"created_at > '2017-01-01'",
-			`"created_at" > ?::DATE`,
-			"2017-01-01",
+			`created_at > '2017-01-01'`,
+			`"created_at" > ?`,
+			`2017-01-01`,
 		)
 		testExpression(
-			"(created_at > '2017-01-01') AND (value < 19)",
-			`("created_at" > ?::DATE) AND ("value" < ?::INTEGER)`,
-			"2017-01-01", 19,
+			`(created_at > '2017-01-01') AND (value < 19)`,
+			`("created_at" > ?) AND ("value" < ?)`,
+			`2017-01-01`, 19,
 		)
 		testExpression(
-			"(created_at > '2017-01-01' AND value < 19) OR death = 1",
-			`(("created_at" > ?::DATE) AND ("value" < ?::INTEGER)) OR ("death" = ?::BIGINT)`,
-			"2017-01-01", 19, 1,
+			`(created_at > '2017-01-01' AND value < 19) OR death = 1`,
+			`(("created_at" > ?) AND ("value" < ?)) OR ("death" = ?)`,
+			`2017-01-01`, 19, 1,
 		)
 		testExpression(
-			"created_at > '2017-01-01' AND value < 19 OR death = 1",
-			`(("created_at" > ?::DATE) AND ("value" < ?::INTEGER)) OR ("death" = ?::BIGINT)`,
-			"2017-01-01", 19, 1,
+			`created_at > '2017-01-01' AND value < 19 OR death = 1`,
+			`(("created_at" > ?) AND ("value" < ?)) OR ("death" = ?)`,
+			`2017-01-01`, 19, 1,
 		)
 		testExpression(
-			"(created_at > '2017-01-01' AND value < 19) OR NOT death = 1",
-			`(("created_at" > ?::DATE) AND ("value" < ?::INTEGER)) OR (NOT ("death" = ?::BIGINT))`,
-			"2017-01-01", 19, 1,
+			`(created_at > '2017-01-01' AND value < 19) OR NOT death = 1`,
+			`(("created_at" > ?) AND ("value" < ?)) OR (NOT ("death" = ?))`,
+			`2017-01-01`, 19, 1,
 		)
-		testBrokenExpression("created_at >> '2017-01-01'")
-		testBrokenExpression("(created_at > '2017-01-01') AND (value < 19)x")
-		testForbiddenFieldsExpression("created > '2017-01-01'")
+		testBrokenExpression(`created_at >> '2017-01-01'`)
+		testBrokenExpression(`(created_at > '2017-01-01') AND (value < 19)x`)
+		testForbiddenFieldsExpression(`created > '2017-01-01'`)
 	})
 }

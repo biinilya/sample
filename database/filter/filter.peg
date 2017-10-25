@@ -4,13 +4,13 @@
 
 package main
 
-type Filter Peg {
- Expression
+type FilterPeg Peg {
+  AST
 }
 
 e <- sp e1 !.
-e1 <- e2 ( and e2 { p.AddOperator2(OpAnd) } / or e2 { p.AddOperator2(OpOr) } )*
-e2 <- not value { p.AddOperator1(OpNot) } / value
+e1 <- e2 ( and e2 { p.AddOperator(OpAnd) } / or e2 { p.AddOperator(OpOr) } )*
+e2 <- not value { p.AddOperator(OpNot) } / value
 value <- expression sp / open e1 close
 
 and <- 'AND' sp
@@ -28,10 +28,10 @@ eq <- '=' { p.AddComparator(CmpEq) }
 
 quote <- '\''
 
-expression <- (identifier sp comparator sp parameter)
+expression <- (identifier sp comparator sp parameter) { p.AddExpression() }
 comparator <- gt / gte / lt / lte / eq
 identifier <- <[a-zA-Z][a-zA-Z0-9_]*> { p.AddIdentifier(buffer[begin:end]) }
-p_string <- quote <[^']+> quote { p.AddParameter(TypeString, buffer[begin:end]) }
-p_number <- <[0-9]+> { p.AddParameter(TypeInt, buffer[begin:end]) }
+p_string <- quote <[^']+> quote { p.AddArgument(TypeString, buffer[begin:end]) }
+p_number <- <[0-9]+> { p.AddArgument(TypeInt, buffer[begin:end]) }
 parameter <- p_string / p_number
 sp <- ( ' ' / '\t' )*
