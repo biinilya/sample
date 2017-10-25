@@ -4,7 +4,7 @@
 
 //go:generate peg -switch -inline filter.peg
 
-package main
+package filter
 
 import (
 	"strconv"
@@ -72,17 +72,14 @@ func (e *AST) AddOperator(operator Operator) {
 }
 
 func (e *AST) AddComparator(comparator Comprator) {
-	fmt.Println("AddComparator", comparator)
 	e.curExpr.comparator = comparator
 }
 
 func (e *AST) AddIdentifier(identifier string) {
-	fmt.Println("AddIdentifier", identifier)
 	e.curExpr.idenitifier = identifier
 }
 
 func (e *AST) AddArgument(t ParameterType, parameter string) {
-	fmt.Println("AddArgument", parameter)
 	switch t {
 	case TypeInt:
 		if intV, intErr := strconv.ParseInt(parameter, 10, 64); intErr != nil {
@@ -99,7 +96,6 @@ func (e *AST) AddArgument(t ParameterType, parameter string) {
 
 func (e *AST) AddExpression() {
 	e.exprStack.Push(e.curExpr)
-	fmt.Println("AddExpression", e.exprStack.Size())
 	e.curExpr = expr{}
 }
 

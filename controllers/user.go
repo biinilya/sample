@@ -127,10 +127,11 @@ func (c *UserController) Put() {
 // @router / [get]
 func (c *UserController) GetAll() {
 	c.RequirePerm(models.PERM_MANAGER, models.PERM_ADMIN)
+	var f = c.LoadFilter("key")
 
 	var users []*models.User
 	var opErr error
-	if users, opErr = models.UsersGetAll(lib.GetDB()); opErr != nil {
+	if users, opErr = models.UsersGetAll(lib.GetDB(), f); opErr != nil {
 		c.Abort("500")
 	}
 

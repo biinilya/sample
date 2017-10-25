@@ -1,4 +1,4 @@
-package main
+package filter
 
 import (
 	"sync"
@@ -34,7 +34,7 @@ func (f *filter) ParseToSql(rawQ string, fields ...string) (string, []interface{
 	if parseErr := f.filter.Parse(); parseErr != nil {
 		return "", nil, parseErr
 	}
-
+	f.filter.Execute()
 	return f.filter.topExpr().renderToSql(fields...)
 }
 
@@ -48,7 +48,7 @@ func (f *filter) ParseToOrm(rawQ string, fields ...string) (*orm.Condition, erro
 	if parseErr := f.filter.Parse(); parseErr != nil {
 		return nil, parseErr
 	}
-
+	f.filter.Execute()
 	return f.filter.topExpr().renderToOrm(fields...)
 }
 

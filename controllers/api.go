@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"toptal/lib"
-
 	"toptal/models"
 
+	"toptal/database/filter"
+
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
 )
 
 // ApiController defines basic operations for API resources
@@ -45,6 +47,18 @@ func (c *UserController) RequireOwnerOrPerm(uid uint64, perm ...string) *models.
 		c.Abort("403")
 	}
 	return u
+}
+
+func (c *UserController) LoadFilter(fields ...string) *orm.Condition {
+	var q = c.GetString("filter")
+	if q == "" {
+		return orm.NewCondition()
+	}
+	var cond, condErr = filter.Filter.ParseToOrm(q, fields...)
+	if condErr != nil {
+		c.Abort("400")
+	}
+	return cond
 }
 
 func checkPerm(u *models.User, perm ...string) bool {

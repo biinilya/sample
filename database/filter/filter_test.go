@@ -1,4 +1,4 @@
-package main
+package filter
 
 import (
 	"fmt"
@@ -69,7 +69,7 @@ func TestCalculator(t *testing.T) {
 
 	Convey("Our calculator should work", t, func() {
 		testExpression(
-			`created_at > '2017-01-01'`,
+			`created_at>'2017-01-01'`,
 			`"created_at" > ?`,
 			`2017-01-01`,
 		)
@@ -77,6 +77,11 @@ func TestCalculator(t *testing.T) {
 			`(created_at > '2017-01-01') AND (value < 19)`,
 			`("created_at" > ?) AND ("value" < ?)`,
 			`2017-01-01`, 19,
+		)
+		testExpression(
+			`(key = '032ae64df1ab4c4dafc139f6c26cb647')`,
+			`"key" = ?`,
+			`032ae64df1ab4c4dafc139f6c26cb647`,
 		)
 		testExpression(
 			`(created_at > '2017-01-01' AND value < 19) OR death = 1`,

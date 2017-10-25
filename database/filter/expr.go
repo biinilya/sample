@@ -1,4 +1,4 @@
-package main
+package filter
 
 import (
 	"errors"
@@ -80,7 +80,7 @@ func (e expr) renderToOrm(fields ...string) (*orm.Condition, error) {
 			return nil, errors.New(fmt.Sprintf(`field <%s> is not allowd to filter in`, e.idenitifier))
 		}
 		return new(orm.Condition).And(
-			fmt.Sprintf(`%s__%s`, e.idenitifier, e.comparator.toOrmComparator),
+			fmt.Sprintf(`%s%s`, e.idenitifier, e.comparator.toOrmComparator()),
 			e.args...,
 		), nil
 	}

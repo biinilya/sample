@@ -275,6 +275,55 @@ func TestUserController(t *testing.T) {
 					So(res[0].Id, ShouldEqual, user.Id)
 				})
 			})
+			Convey("When Applying Filter And User Found", func() {
+				user.AddPermission(lib.GetDB(), models.PERM_ADMIN)
+				qUrl := fmt.Sprintf(`/api/v1/user/?filter=(key = '%s')`, user.Key)
+				w := tests.BeegoCallWithHeader("GET", qUrl, nil, headers)
+				Convey("Status Code Should Be 200", func() {
+					So(w.Code, ShouldEqual, 200)
+				})
+				if w.Code == 200 {
+					Convey("The Result Should Be A List Of Prepared Users", func() {
+						var res = []models.UserInfoView{}
+						tests.FromJson(w.Body.Bytes(), &res)
+						So(len(res), ShouldEqual, 1)
+						So(res[0].Key, ShouldEqual, user.Key)
+						So(res[0].Id, ShouldEqual, user.Id)
+					})
+				}
+			})
+			Convey("When Applying Filter And User Not Found", func() {
+				user.AddPermission(lib.GetDB(), models.PERM_ADMIN)
+				qUrl := fmt.Sprintf(`/api/v1/user/?filter=(key = '%sabc')`, user.Key)
+				w := tests.BeegoCallWithHeader("GET", qUrl, nil, headers)
+				Convey("Status Code Should Be 200", func() {
+					So(w.Code, ShouldEqual, 200)
+				})
+				if w.Code == 200 {
+					Convey("The Result Should Be Empty", func() {
+						var res = []models.UserInfoView{}
+						tests.FromJson(w.Body.Bytes(), &res)
+						So(len(res), ShouldEqual, 0)
+					})
+				}
+			})
+			Convey("When Applying Filter And Filter Is Broken", func() {
+				user.AddPermission(lib.GetDB(), models.PERM_ADMIN)
+				Convey("When Invalid Key In Filter", func() {
+					qUrl := fmt.Sprintf(`/api/v1/user/?filter=(keyxx = '%sabc')`, user.Key)
+					w := tests.BeegoCallWithHeader("GET", qUrl, nil, headers)
+					Convey("Status Code Should Be 400", func() {
+						So(w.Code, ShouldEqual, 400)
+					})
+				})
+				Convey("When Invalid Syntax In Filter", func() {
+					qUrl := fmt.Sprintf(`/api/v1/user/?filter=(key == '%sabc')`, user.Key)
+					w := tests.BeegoCallWithHeader("GET", qUrl, nil, headers)
+					Convey("Status Code Should Be 400", func() {
+						So(w.Code, ShouldEqual, 400)
+					})
+				})
+			})
 		})
 
 		Convey("Get One Method", func() {
