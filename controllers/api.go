@@ -1,10 +1,9 @@
 package controllers
 
 import (
+	"toptal/database/filter"
 	"toptal/lib"
 	"toptal/models"
-
-	"toptal/database/filter"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -72,3 +71,7 @@ func checkPerm(u *models.User, perm ...string) bool {
 	}
 	return granted
 }
+
+// Each time entry when entered has a date, distance, time, and location.
+// Based on the provided date and location, API should connect to a weather API provider and get the weather conditions for the run, and store that with each run.
+// The API must create a report on average speed & distance per week.

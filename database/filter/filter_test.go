@@ -39,7 +39,7 @@ func TestCalculator(t *testing.T) {
 		})
 	}
 
-	var testForbiddenFieldsExpression = func(expression string) {
+	var testForbiddenFieldsExpression = func(expression string, errMsg string) {
 		Convey(fmt.Sprintf("[Restricted] %s", expression), func() {
 			filter.Buffer = expression
 			filter.Reset()
@@ -53,10 +53,15 @@ func TestCalculator(t *testing.T) {
 			Convey("Result Query String Is Valid", func() {
 				So(qErr, ShouldNotBeNil)
 			})
+			if qErr != nil {
+				Convey("Error message in proper format", func() {
+					So(qErr.Error(), ShouldEqual, errMsg)
+				})
+			}
 		})
 	}
 
-	var testBrokenExpression = func(expression string) {
+	var testBrokenExpression = func(expression string, errMsg string) {
 		Convey(fmt.Sprintf("[Broken] expr %s", expression), func() {
 			filter.Buffer = expression
 			filter.Reset()
@@ -64,6 +69,11 @@ func TestCalculator(t *testing.T) {
 			Convey("Parsed with errors", func() {
 				So(filterErr, ShouldNotBeNil)
 			})
+			if filterErr != nil {
+				Convey("Error message in proper format", func() {
+					So(formatParsingError(expression, filterErr).Error(), ShouldEqual, errMsg)
+				})
+			}
 		})
 	}
 
@@ -98,8 +108,17 @@ func TestCalculator(t *testing.T) {
 			`(("created_at" > ?) AND ("value" < ?)) OR (NOT ("death" = ?))`,
 			`2017-01-01`, 19, 1,
 		)
-		testBrokenExpression(`created_at >> '2017-01-01'`)
-		testBrokenExpression(`(created_at > '2017-01-01') AND (value < 19)x`)
-		testForbiddenFieldsExpression(`created > '2017-01-01'`)
+		testBrokenExpression(
+			`created_at >> '2017-01-01'`,
+			`created_at > ||>||  '2017-01-01'`,
+		)
+		testBrokenExpression(
+			`(created_at > '2017-01-01') AND (value < 19)x`,
+			`(created_at > '2017-01-01') AND (value < 19) ||x|| `,
+		)
+		testForbiddenFieldsExpression(
+			`created > '2017-01-01'`,
+			`field <created> is not allowed to filter in`,
+		)
 	})
 }

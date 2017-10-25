@@ -121,6 +121,7 @@ func (c *UserController) Put() {
 // @Title Get All
 // @Description Users Directory
 // @Param	X-Access-Token		header 	string	true		"Access Token"
+// @Param	filter		query 	string	false		"User ID"
 // @Success 200 {object} []models.UserInfoView
 // @Failure 401 unauthorized
 // @Failure 403 forbidden
