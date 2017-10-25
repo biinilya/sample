@@ -43,7 +43,7 @@ func (e expr) renderToSql(fields ...string) (string, []interface{}, error) {
 	}
 	if e.agg == nil {
 		if !fieldsAllowed[e.idenitifier] && len(fields) > 0 {
-			return "", nil, errors.New(fmt.Sprintf(`field <%s> is not allowed to filter in`, e.idenitifier))
+			return "", nil, errors.New(fmt.Sprintf(`field '%s' is not allowed to filter in`, e.idenitifier))
 		}
 		return fmt.Sprintf(`"%s" %s ?`, e.idenitifier, e.comparator), e.args, nil
 	}
@@ -77,7 +77,7 @@ func (e expr) renderToOrm(fields ...string) (*orm.Condition, error) {
 	}
 	if e.agg == nil {
 		if !fieldsAllowed[e.idenitifier] && len(fields) > 0 {
-			return nil, errors.New(fmt.Sprintf(`field <%s> is not allowed to filter in`, e.idenitifier))
+			return nil, errors.New(fmt.Sprintf(`field '%s' is not allowed to filter in`, e.idenitifier))
 		}
 		return new(orm.Condition).And(
 			fmt.Sprintf(`%s%s`, e.idenitifier, e.comparator.toOrmComparator()),

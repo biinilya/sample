@@ -118,7 +118,7 @@ func TestCalculator(t *testing.T) {
 		)
 		testForbiddenFieldsExpression(
 			`created > '2017-01-01'`,
-			`field <created> is not allowed to filter in`,
+			`field 'created' is not allowed to filter in`,
 		)
 	})
 }

@@ -9,8 +9,6 @@ package filter
 import (
 	"strconv"
 
-	"fmt"
-
 	"github.com/emirpasic/gods/stacks"
 	"github.com/emirpasic/gods/stacks/linkedliststack"
 )
@@ -54,7 +52,6 @@ func (e *AST) Init() {
 }
 
 func (e *AST) AddOperator(operator Operator) {
-	fmt.Println("AddOperator", operator, e.exprStack.Size())
 	var exprList = make([]expr, operator.ArgsNum())
 	for idx, _ := range exprList {
 		if e, found := e.exprStack.Pop(); !found {

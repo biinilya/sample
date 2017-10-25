@@ -19,6 +19,10 @@ paths:
         description: Access Token
         required: true
         type: string
+      - in: query
+        name: filter
+        description: Filter users e.x. (key = 'xxx')
+        type: string
       responses:
         "200":
           description: ""
@@ -145,8 +149,8 @@ paths:
             $ref: '#/definitions/models.UserAccessTokenView'
         "400":
           description: bad request
-        "401":
-          description: wrong credentials
+        "403":
+          description: forbidden
 definitions:
   models.UserAccessTokenView:
     title: UserAccessTokenView

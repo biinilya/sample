@@ -200,8 +200,8 @@ func TestUserController(t *testing.T) {
 				w := tests.BeegoCall("POST", "/api/v1/user/sign_in", bytes.NewReader(
 					tests.ToJson(credentials)),
 				)
-				Convey("Status Code Should Be 401", func() {
-					So(w.Code, ShouldEqual, 401)
+				Convey("Status Code Should Be 403", func() {
+					So(w.Code, ShouldEqual, 403)
 				})
 			})
 			Convey("When Invalid Secret", func() {
@@ -209,8 +209,8 @@ func TestUserController(t *testing.T) {
 				w := tests.BeegoCall("POST", "/api/v1/user/sign_in", bytes.NewReader(
 					tests.ToJson(credentials)),
 				)
-				Convey("Status Code Should Be 401", func() {
-					So(w.Code, ShouldEqual, 401)
+				Convey("Status Code Should Be 403", func() {
+					So(w.Code, ShouldEqual, 403)
 				})
 			})
 			Convey("When Credentials Are Valid", func() {

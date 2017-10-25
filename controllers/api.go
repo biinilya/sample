@@ -5,6 +5,8 @@ import (
 	"toptal/lib"
 	"toptal/models"
 
+	"fmt"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
@@ -18,13 +20,13 @@ func (c *UserController) Authenticate() *models.User {
 	var token = c.Ctx.Request.Header.Get("X-Access-Token")
 	var uid, ok = lib.ValidateAccessToken(token)
 	if !ok {
-		c.Abort("401")
+		c.AbortWith(401, "Invalid access token")
 	}
 
 	var u = new(models.User)
 	var userErr = u.LoadById(lib.GetDB(), uid)
 	if userErr != nil {
-		c.Abort("403")
+		c.AbortWith(403, "No such user")
 	}
 	return u
 }
@@ -32,7 +34,7 @@ func (c *UserController) Authenticate() *models.User {
 func (c *UserController) RequirePerm(perm ...string) *models.User {
 	var u = c.Authenticate()
 	if !checkPerm(u, perm...) {
-		c.Abort("403")
+		c.AbortWith(403, "Permission denied")
 	}
 	return u
 }
@@ -43,9 +45,18 @@ func (c *UserController) RequireOwnerOrPerm(uid uint64, perm ...string) *models.
 		return u
 	}
 	if !checkPerm(u, perm...) {
-		c.Abort("403")
+		c.AbortWith(403, "Permission denied")
 	}
 	return u
+}
+
+func (c *UserController) AbortWith(code int, message interface{}) {
+	var err models.RequestError
+	err.Message = fmt.Sprintf("%+v", message)
+	c.Data["json"] = err
+	c.Ctx.Output.SetStatus(code)
+	c.ServeJSON()
+	c.StopRun()
 }
 
 func (c *UserController) LoadFilter(fields ...string) *orm.Condition {
@@ -55,7 +66,7 @@ func (c *UserController) LoadFilter(fields ...string) *orm.Condition {
 	}
 	var cond, condErr = filter.Filter.ParseToOrm(q, fields...)
 	if condErr != nil {
-		c.Abort("400")
+		c.AbortWith(400, "Bad filter: "+condErr.Error())
 	}
 	return cond
 }

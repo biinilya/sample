@@ -32,7 +32,7 @@ func (c *UserController) Post() {
 		resp.Id = uint64(v.Id)
 		return
 	}); opErr != nil {
-		c.Abort("500")
+		c.AbortWith(500, opErr)
 	}
 
 	c.Ctx.Output.SetStatus(201)
@@ -45,23 +45,23 @@ func (c *UserController) Post() {
 // @Param	body		body 	models.UserCredentialsView	true		"Credentials to Sign In"
 // @Success 200 {object} models.UserAccessTokenView
 // @Failure 400 bad request
-// @Failure 401 wrong credentials
+// @Failure 403 forbidden
 // @router /sign_in [post]
 func (c *UserController) SignIn() {
 	var cred models.UserCredentialsView
 	if dataInErr := json.Unmarshal(c.Ctx.Input.RequestBody, &cred); dataInErr != nil {
-		c.Abort("400")
+		c.AbortWith(400, dataInErr)
 	}
 	if cred.Key == "" || cred.Secret == "" {
-		c.Abort("400")
+		c.AbortWith(400, "Key and Secret should not be empty")
 	}
 
 	var v models.User
 	if opErr := v.LoadByKey(lib.GetDB(), cred.Key); opErr != nil {
-		c.Abort("401")
+		c.AbortWith(403, "Invalid credentials")
 	}
 	if lib.Encode(cred.Secret) != v.Secret {
-		c.Abort("401")
+		c.AbortWith(403, "Invalid credentials")
 	}
 
 	var resp models.UserAccessTokenView
@@ -100,13 +100,13 @@ func (c *UserController) GetOne() {
 func (c *UserController) Put() {
 	var uid, uidErr = c.GetUint64(":uid")
 	if uidErr != nil {
-		c.Abort("400")
+		c.AbortWith(400, "Invalid :uid")
 	}
 	var u = c.RequireOwnerOrPerm(uid, models.PERM_MANAGER, models.PERM_ADMIN)
 
 	var secret, dbErr = u.NewCred(lib.GetDB())
 	if dbErr != nil {
-		c.Abort("500")
+		c.AbortWith(500, dbErr)
 	}
 
 	c.Data["json"] = models.UserCredentialsView{
@@ -121,19 +121,19 @@ func (c *UserController) Put() {
 // @Title Get All
 // @Description Users Directory
 // @Param	X-Access-Token		header 	string	true		"Access Token"
-// @Param	filter		query 	string	false		"User ID"
+// @Param	filter		query 	string	false		"Filter users e.x. (key = 'xxx')"
 // @Success 200 {object} []models.UserInfoView
 // @Failure 401 unauthorized
 // @Failure 403 forbidden
 // @router / [get]
 func (c *UserController) GetAll() {
-	c.RequirePerm(models.PERM_MANAGER, models.PERM_ADMIN)
 	var f = c.LoadFilter("key")
+	c.RequirePerm(models.PERM_MANAGER, models.PERM_ADMIN)
 
 	var users []*models.User
 	var opErr error
 	if users, opErr = models.UsersGetAll(lib.GetDB(), f); opErr != nil {
-		c.Abort("500")
+		c.AbortWith(500, opErr)
 	}
 
 	c.Data["json"] = userView.AsJson(users)
@@ -153,13 +153,13 @@ func (c *UserController) GetAll() {
 func (c *UserController) Delete() {
 	var uid, uidErr = c.GetUint64(":uid")
 	if uidErr != nil {
-		c.Abort("400")
+		c.AbortWith(400, "Invalid :uid")
 	}
 	var u = c.RequireOwnerOrPerm(uid, models.PERM_MANAGER, models.PERM_ADMIN)
 
 	var dbErr = u.Delete(lib.GetDB())
 	if dbErr != nil {
-		c.Abort("500")
+		c.AbortWith(500, dbErr)
 	}
 	c.Data["json"] = userView.AsJson(u)
 	c.ServeJSON()
