@@ -87,6 +87,3 @@ func checkPerm(u *models.User, perm ...string) bool {
 	}
 	return granted
 }
-
-// Based on the provided date and location, API should connect to a weather API provider and get the weather conditions for the run, and store that with each run.
-// The API must create a report on average speed & distance per week.

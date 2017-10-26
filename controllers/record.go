@@ -70,6 +70,7 @@ func (c *RecordController) Post() {
 // @Description update existing record, returns updated record data
 // @Param   X-Access-Token header  string              true	 "Access Token"
 // @Param   uid            path    uint64              true  "User ID"
+// @Param   record_id      path    uint64              true  "Record ID"
 // @Param   body           body    models.RecordData   true  "Record"
 // @Success 200 {object} models.RecordView
 // @Failure 400 Bad request
@@ -101,7 +102,8 @@ func (c *RecordController) Put() {
 // @Description update existing record, returns updated record data
 // @Param   X-Access-Token header  string  true  "Access Token"
 // @Param   uid            path    uint64  true  "User ID"
-// @Success 200 OK
+// @Param   record_id      path    uint64  true  "Record ID"
+// @Success 200 {object} models.RecordView
 // @Failure 400 Bad request
 // @Failure 401 unauthorized
 // @Failure 403 forbidden
@@ -116,7 +118,6 @@ func (c *RecordController) Delete() {
 	if dbErr := record.LoadById(lib.GetDB(), recordId); dbErr != nil {
 		c.AbortWith(403, "Access to record is forbidden")
 	}
-	c.LoadRecordFromBody(&record)
 
 	if dbErr := record.Delete(lib.GetDB()); dbErr != nil {
 		c.AbortWith(500, dbErr)
@@ -147,5 +148,26 @@ func (c *RecordController) GetAll() {
 	}
 
 	c.Data["json"] = recordView.AsJson(&records)
+	c.ServeJSON()
+}
+
+// @Title WeeklyReport
+// @Description Get average distance and duration per week
+// @Param   X-Access-Token header  string  true  "Access Token"
+// @Param   uid            path    uint64  true  "User ID"
+// @Success 200 {object} []models.WeeklyReport
+// @Failure 400 Bad request
+// @Failure 401 unauthorized
+// @Failure 403 forbidden
+// @router /report/weekly [get]
+func (c *RecordController) WeeklyReport() {
+	c.RequireOwnerOrPerm(models.PERM_ADMIN)
+
+	var report, dbErr = models.RecordsGetWeeklyReport(lib.GetDB())
+	if dbErr != nil {
+		c.AbortWith(500, dbErr)
+	}
+
+	c.Data["json"] = report
 	c.ServeJSON()
 }

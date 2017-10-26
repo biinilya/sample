@@ -67,14 +67,17 @@ func RecordsGetAll(o orm.Ormer, cond *orm.Condition) (records []*Record, opErr e
 	return
 }
 
+type WeatherInfo struct {
+}
+
 type RecordView struct {
-	Id        int64           `json:"id"`
-	Date      time.Time       `json:"date"`
-	Distance  float64         `json:"distance"`
-	Duration  float64         `json:"duration"`
-	Latitude  float64         `json:"latitude"`
-	Longitude float64         `json:"longitude"`
-	Weather   json.RawMessage `json:"weather"`
+	Id        int64       `json:"id"`
+	Date      time.Time   `json:"date"`
+	Distance  float64     `json:"distance"`
+	Duration  float64     `json:"duration"`
+	Latitude  float64     `json:"latitude"`
+	Longitude float64     `json:"longitude"`
+	Weather   WeatherInfo `json:"weather"`
 }
 
 type RecordData struct {

@@ -39,6 +39,14 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
+	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+		beego.ControllerComments{
+			Method:           "WeeklyReport",
+			Router:           `/report/weekly`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Params:           nil})
+
 	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "Post",

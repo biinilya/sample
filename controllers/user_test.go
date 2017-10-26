@@ -277,7 +277,7 @@ func TestUserController(t *testing.T) {
 			})
 			Convey("When Applying Filter And User Found", func() {
 				user.AddPermission(lib.GetDB(), models.PERM_ADMIN)
-				qUrl := fmt.Sprintf(`/api/v1/user/?filter=(key = '%s')`, user.Key)
+				qUrl := fmt.Sprintf(`/api/v1/user/?filter=(key eq '%s')`, user.Key)
 				w := tests.BeegoCallWithHeader("GET", qUrl, nil, headers)
 				Convey("Status Code Should Be 200", func() {
 					So(w.Code, ShouldEqual, 200)
@@ -294,7 +294,7 @@ func TestUserController(t *testing.T) {
 			})
 			Convey("When Applying Filter And User Not Found", func() {
 				user.AddPermission(lib.GetDB(), models.PERM_ADMIN)
-				qUrl := fmt.Sprintf(`/api/v1/user/?filter=(key = '%sabc')`, user.Key)
+				qUrl := fmt.Sprintf(`/api/v1/user/?filter=(key ne '%s')`, user.Key)
 				w := tests.BeegoCallWithHeader("GET", qUrl, nil, headers)
 				Convey("Status Code Should Be 200", func() {
 					So(w.Code, ShouldEqual, 200)

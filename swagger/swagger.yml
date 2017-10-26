@@ -197,6 +197,8 @@ paths:
           description: unauthorized
         "403":
           description: forbidden
+        "503":
+          description: weather service is down
   /user/{uid}/record/{record_id}:
     put:
       tags:
@@ -212,6 +214,12 @@ paths:
       - in: path
         name: uid
         description: User ID
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: record_id
+        description: Record ID
         required: true
         type: integer
         format: int64
@@ -249,9 +257,48 @@ paths:
         required: true
         type: integer
         format: int64
+      - in: path
+        name: record_id
+        description: Record ID
+        required: true
+        type: integer
+        format: int64
       responses:
         "200":
-          description: OK
+          description: ""
+          schema:
+            $ref: '#/definitions/models.RecordView'
+        "400":
+          description: Bad request
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
+  /user/{uid}/record/report/weekly:
+    get:
+      tags:
+      - user/:uid/record
+      description: Get average distance and duration per week
+      operationId: RecordController.WeeklyReport
+      parameters:
+      - in: header
+        name: X-Access-Token
+        description: Access Token
+        required: true
+        type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.WeeklyReport'
         "400":
           description: Bad request
         "401":
@@ -323,6 +370,8 @@ definitions:
       longitude:
         type: number
         format: double
+      weather:
+        $ref: '#/definitions/models.WeatherInfo'
   models.UserAccessTokenView:
     title: UserAccessTokenView
     type: object
@@ -355,6 +404,25 @@ definitions:
       updated:
         type: string
         format: string
+  models.WeatherInfo:
+    title: WeatherInfo
+    type: object
+  models.WeeklyReport:
+    title: WeeklyReport
+    type: object
+    properties:
+      avg_distance:
+        type: number
+        format: double
+      avg_duration:
+        type: number
+        format: double
+      week:
+        type: integer
+        format: int64
+      year:
+        type: integer
+        format: int64
 tags:
 - name: user
   description: |2
