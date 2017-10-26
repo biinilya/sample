@@ -440,7 +440,7 @@ paths:
         description: Credentials to Sign In
         required: true
         schema:
-          $ref: '#/definitions/models.UserCredentialsView'
+          $ref: '#/definitions/models.UserCredentialsData'
       responses:
         "200":
           description: ""
@@ -507,6 +507,14 @@ definitions:
     type: object
     properties:
       access-token:
+        type: string
+  models.UserCredentialsData:
+    title: UserCredentialsData
+    type: object
+    properties:
+      key:
+        type: string
+      secret:
         type: string
   models.UserCredentialsView:
     title: UserCredentialsView

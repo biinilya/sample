@@ -132,6 +132,11 @@ type UserCredentialsView struct {
 	Secret string `json:"secret"`
 }
 
+type UserCredentialsData struct {
+	Key    string `json:"key"`
+	Secret string `json:"secret"`
+}
+
 type UserAccessTokenView struct {
 	AccessToken string `json:"access-token"`
 }

@@ -92,7 +92,7 @@ Use this method to receive Access Token which is required for API access
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Body**|**body**  <br>*required*|Credentials to Sign In|[models.UserCredentialsView](#models-usercredentialsview)|
+|**Body**|**body**  <br>*required*|Credentials to Sign In|[models.UserCredentialsData](#models-usercredentialsdata)|
 
 
 #### Responses
@@ -494,6 +494,15 @@ update existing record, returns updated record data
 |Name|Schema|
 |---|---|
 |**access-token**  <br>*optional*|string|
+
+
+<a name="models-usercredentialsdata"></a>
+### models.UserCredentialsData
+
+|Name|Schema|
+|---|---|
+|**key**  <br>*optional*|string|
+|**secret**  <br>*optional*|string|
 
 
 <a name="models-usercredentialsview"></a>

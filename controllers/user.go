@@ -44,7 +44,7 @@ func (c *UserController) Post() {
 
 // @Title SignIn
 // @Description Use this method to receive Access Token which is required for API access
-// @Param	body		body 	models.UserCredentialsView	true		"Credentials to Sign In"
+// @Param	body		body 	models.UserCredentialsData	true		"Credentials to Sign In"
 // @Success 200 {object} models.UserAccessTokenView
 // @Failure 400 bad request
 // @Failure 403 forbidden
