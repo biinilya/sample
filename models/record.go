@@ -56,9 +56,10 @@ func (r *Record) Delete(o orm.Ormer) (opErr error) {
 	return
 }
 
-func RecordsGetAll(o orm.Ormer, cond *orm.Condition) (records []*Record, opErr error) {
+func RecordsGetAll(o orm.Ormer, cond *orm.Condition, offset, limit int) (records []*Record, opErr error) {
 	records = []*Record{}
-	if _, opErr = o.QueryTable(Record{}).SetCond(cond).All(&records); opErr != nil {
+	if _, opErr = o.QueryTable(Record{}).SetCond(cond).
+		OrderBy("Id").Offset(offset).Limit(limit).All(&records); opErr != nil {
 		return
 	}
 	for _, r := range records {

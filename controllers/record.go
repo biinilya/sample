@@ -47,7 +47,8 @@ func (c *ApiController) LoadRecordFromBody(record *models.Record) {
 // @Failure 503 weather service is down
 // @router / [post]
 func (c *RecordController) Post() {
-	var u = c.RequireOwnerOrPerm(models.PERM_ADMIN)
+	c.RequireOwnerOrPerm(models.PERM_ADMIN)
+	var u = c.LoadUser()
 	var record models.Record
 	c.LoadRecordFromBody(&record)
 
@@ -132,17 +133,21 @@ func (c *RecordController) Delete() {
 // @Description Get all user-related records
 // @Param   X-Access-Token header  string  true  "Access Token"
 // @Param   uid            path    uint64  true  "User ID"
-// @Param   filter         query   string  false "Filter records e.x. (date = '2017-01-01')"
+// @Param   filter         query   string  false "Filter records e.x. (date eq '2017-01-01')"
+// @Param   offset         query   int     false "Offset in records"
+// @Param   limit          query   int     false "Limit number of records to (default 50)"
 // @Success 200 {object} []models.RecordView
 // @Failure 400 Bad request
 // @Failure 401 unauthorized
 // @Failure 403 forbidden
 // @router / [get]
 func (c *RecordController) GetAll() {
-	var u = c.RequireOwnerOrPerm(models.PERM_ADMIN)
-	var f = c.LoadFilter("date", "distance", "duration", "latitude", "longitude").And("user__id", u.Id)
+	c.RequireOwnerOrPerm(models.PERM_ADMIN)
+	var u = c.LoadUser()
+	var f, offset, limit = c.LoadFilter("date", "distance", "duration", "latitude", "longitude")
+	f = f.And("user__id", u.Id)
 
-	var records, dbErr = models.RecordsGetAll(lib.GetDB(), f)
+	var records, dbErr = models.RecordsGetAll(lib.GetDB(), f, offset, limit)
 	if dbErr != nil {
 		c.AbortWith(500, dbErr)
 	}
@@ -162,8 +167,9 @@ func (c *RecordController) GetAll() {
 // @router /report/weekly [get]
 func (c *RecordController) WeeklyReport() {
 	c.RequireOwnerOrPerm(models.PERM_ADMIN)
+	var u = c.LoadUser()
 
-	var report, dbErr = models.RecordsGetWeeklyReport(lib.GetDB())
+	var report, dbErr = models.RecordsGetWeeklyReport(lib.GetDB(), uint64(u.Id))
 	if dbErr != nil {
 		c.AbortWith(500, dbErr)
 	}

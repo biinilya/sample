@@ -98,7 +98,8 @@ func (c *UserController) GetOne() {
 // @Failure 403 forbidden
 // @router /:uid/credentials [put]
 func (c *UserController) Put() {
-	var u = c.RequireOwnerOrPerm(models.PERM_MANAGER, models.PERM_ADMIN)
+	c.RequireOwnerOrPerm(models.PERM_MANAGER, models.PERM_ADMIN)
+	var u = c.LoadUser()
 
 	var secret, dbErr = u.NewCred(lib.GetDB())
 	if dbErr != nil {
@@ -124,7 +125,8 @@ func (c *UserController) Put() {
 // @Failure 403 forbidden
 // @router /:uid [delete]
 func (c *UserController) Delete() {
-	var u = c.RequireOwnerOrPerm(models.PERM_MANAGER, models.PERM_ADMIN)
+	c.RequireOwnerOrPerm(models.PERM_MANAGER, models.PERM_ADMIN)
+	var u = c.LoadUser()
 
 	var dbErr = u.Delete(lib.GetDB())
 	if dbErr != nil {
@@ -138,18 +140,20 @@ func (c *UserController) Delete() {
 // @Title Get All
 // @Description Users Directory
 // @Param	X-Access-Token		header 	string	true		"Access Token"
-// @Param	filter		query 	string	false		"Filter users e.x. (key = 'xxx')"
+// @Param	filter		query 	string	false		"Filter users e.x. (key eq 'xxx')"
+// @Param	offset		query 	int  	false		"Offset in records"
+// @Param	limit		query 	int  	false		"Limit number of records to (default 50)"
 // @Success 200 {object} []models.UserInfoView
 // @Failure 401 unauthorized
 // @Failure 403 forbidden
 // @router / [get]
 func (c *UserController) GetAll() {
-	var f = c.LoadFilter("key", "created", "updated")
+	var f, offset, limit = c.LoadFilter("key", "created", "updated")
 	c.RequirePerm(models.PERM_MANAGER, models.PERM_ADMIN)
 
 	var users []*models.User
 	var opErr error
-	if users, opErr = models.UsersGetAll(lib.GetDB(), f); opErr != nil {
+	if users, opErr = models.UsersGetAll(lib.GetDB(), f, offset, limit); opErr != nil {
 		c.AbortWith(500, opErr)
 	}
 

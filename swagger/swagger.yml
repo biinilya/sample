@@ -21,8 +21,18 @@ paths:
         type: string
       - in: query
         name: filter
-        description: Filter users e.x. (key = 'xxx')
+        description: Filter users e.x. (key eq 'xxx')
         type: string
+      - in: query
+        name: offset
+        description: Offset in records
+        type: integer
+        format: int64
+      - in: query
+        name: limit
+        description: Limit number of records to (default 50)
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""
@@ -148,8 +158,18 @@ paths:
         format: int64
       - in: query
         name: filter
-        description: Filter records e.x. (date = '2017-01-01')
+        description: Filter records e.x. (date eq '2017-01-01')
         type: string
+      - in: query
+        name: offset
+        description: Offset in records
+        type: integer
+        format: int64
+      - in: query
+        name: limit
+        description: Limit number of records to (default 50)
+        type: integer
+        format: int64
       responses:
         "200":
           description: ""

@@ -99,9 +99,10 @@ func (u *User) Delete(o orm.Ormer) (opErr error) {
 	return
 }
 
-func UsersGetAll(o orm.Ormer, cond *orm.Condition) (users []*User, opErr error) {
+func UsersGetAll(o orm.Ormer, cond *orm.Condition, offset, limit int) (users []*User, opErr error) {
 	users = []*User{}
-	if _, opErr = o.QueryTable(User{}).SetCond(cond).All(&users); opErr != nil {
+	if _, opErr = o.QueryTable(User{}).SetCond(cond).
+		OrderBy("Id").Offset(offset).Limit(limit).All(&users); opErr != nil {
 		return
 	}
 	return

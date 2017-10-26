@@ -11,26 +11,28 @@ type WeeklyReport struct {
 
 var rQ = `
 SELECT
-  EXTRACT(year FROM date) as year,
-  EXTRACT(week FROM date) as week,
-  AVG(distance) as distance,
-  AVG(duration) as duration
-FROM record
+  EXTRACT(year FROM r.date) as year,
+  EXTRACT(week FROM r.date) as week,
+  AVG(r.distance) as distance,
+  AVG(r.duration) as duration
+FROM record r INNER JOIN "user" u on u.id = r.user_id
+WHERE
+  u.id = ?
 GROUP BY
-  EXTRACT(year FROM date),
-  EXTRACT(week FROM date)
+  EXTRACT(year FROM r.date),
+  EXTRACT(week FROM r.date)
 ORDER BY (
-  EXTRACT(year FROM date),
-  EXTRACT(week FROM date)
+  EXTRACT(year FROM r.date),
+  EXTRACT(week FROM r.date)
 ) DESC;
 `
 
-func RecordsGetWeeklyReport(o orm.Ormer) (report []*WeeklyReport, opErr error) {
+func RecordsGetWeeklyReport(o orm.Ormer, uid uint64) (report []*WeeklyReport, opErr error) {
 	var years = []int{}
 	var weeks = []int{}
 	var distance = []float64{}
 	var duration = []float64{}
-	_, dbErr := o.Raw(rQ).QueryRows(&years, &weeks, &distance, &duration)
+	_, dbErr := o.Raw(rQ, uid).QueryRows(&years, &weeks, &distance, &duration)
 	if dbErr != nil {
 		return nil, dbErr
 	}

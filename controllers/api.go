@@ -31,15 +31,28 @@ func (c *ApiController) Authenticate() *models.User {
 	return u
 }
 
-func (c *ApiController) RequirePerm(perm ...string) *models.User {
-	var u = c.Authenticate()
-	if !checkPerm(u, perm...) {
-		c.AbortWith(403, "Permission denied")
+func (c *ApiController) LoadUser() *models.User {
+	var uid, uidErr = c.GetUint64(":uid")
+	if uidErr != nil {
+		c.AbortWith(400, "Invalid :uid")
+	}
+	var u = new(models.User)
+	var userErr = u.LoadById(lib.GetDB(), uid)
+	if userErr != nil {
+		c.AbortWith(403, "No such user")
 	}
 	return u
 }
 
-func (c *ApiController) RequireOwnerOrPerm(perm ...string) *models.User {
+func (c *ApiController) RequirePerm(perm ...string) {
+	var u = c.Authenticate()
+	if !checkPerm(u, perm...) {
+		c.AbortWith(403, "Permission denied")
+	}
+	return
+}
+
+func (c *ApiController) RequireOwnerOrPerm(perm ...string) {
 	var uid, uidErr = c.GetUint64(":uid")
 	if uidErr != nil {
 		c.AbortWith(400, "Invalid :uid")
@@ -47,12 +60,12 @@ func (c *ApiController) RequireOwnerOrPerm(perm ...string) *models.User {
 
 	var u = c.Authenticate()
 	if uint64(u.Id) == uid {
-		return u
+		return
 	}
 	if !checkPerm(u, perm...) {
 		c.AbortWith(403, "Permission denied")
 	}
-	return u
+	return
 }
 
 func (c *ApiController) AbortWith(code int, message interface{}) {
@@ -64,16 +77,24 @@ func (c *ApiController) AbortWith(code int, message interface{}) {
 	c.StopRun()
 }
 
-func (c *ApiController) LoadFilter(fields ...string) *orm.Condition {
+func (c *ApiController) LoadFilter(fields ...string) (*orm.Condition, int, int) {
+	var limit, limitErr = c.GetUint64("limit", 50)
+	if limitErr != nil {
+		c.AbortWith(400, "Bad limit")
+	}
+	var offset, offsetErr = c.GetUint64("offset", 0)
+	if offsetErr != nil {
+		c.AbortWith(400, "Bad offset")
+	}
 	var q = c.GetString("filter")
 	if q == "" {
-		return orm.NewCondition()
+		return orm.NewCondition(), int(offset), int(limit)
 	}
 	var cond, condErr = filter.Filter.ParseToOrm(q, fields...)
 	if condErr != nil {
 		c.AbortWith(400, "Bad filter: "+condErr.Error())
 	}
-	return cond
+	return cond, int(offset), int(limit)
 }
 
 func checkPerm(u *models.User, perm ...string) bool {
