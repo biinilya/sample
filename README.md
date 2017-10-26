@@ -198,6 +198,98 @@ generate new User credentials
 * user
 
 
+<a name="usercontroller-add-permission"></a>
+### GET /user/{uid}/permission
+
+#### Description
+delete the User
+
+
+#### Parameters
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
+|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+
+
+#### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**||< [models.PermissionView](#models-permissionview) > array|
+|**400**|bad request (uid is missing or is not a number)|No Content|
+|**401**|unauthorized|No Content|
+|**403**|forbidden|No Content|
+
+
+#### Tags
+
+* user
+
+
+<a name="usercontroller-add-permission"></a>
+### POST /user/{uid}/permission/{title}
+
+#### Description
+delete the User
+
+
+#### Parameters
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
+|**Path**|**title**  <br>*required*|Title of Permission to Add to user|string|
+|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+
+
+#### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**||< [models.PermissionView](#models-permissionview) > array|
+|**400**|bad request (uid is missing or is not a number)|No Content|
+|**401**|unauthorized|No Content|
+|**403**|forbidden|No Content|
+
+
+#### Tags
+
+* user
+
+
+<a name="usercontroller-del-permission"></a>
+### DELETE /user/{uid}/permission/{title}
+
+#### Description
+delete the User
+
+
+#### Parameters
+
+|Type|Name|Description|Schema|
+|---|---|---|---|
+|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
+|**Path**|**title**  <br>*required*|Title of Permission to Add to user|string|
+|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+
+
+#### Responses
+
+|HTTP Code|Description|Schema|
+|---|---|---|
+|**200**||< [models.PermissionView](#models-permissionview) > array|
+|**400**|bad request (uid is missing or is not a number)|No Content|
+|**401**|unauthorized|No Content|
+|**403**|forbidden|No Content|
+
+
+#### Tags
+
+* user
+
+
 <a name="recordcontroller-post"></a>
 ### POST /user/{uid}/record/
 
@@ -360,6 +452,15 @@ update existing record, returns updated record data
 
 <a name="definitions"></a>
 ## Definitions
+
+<a name="models-permissionview"></a>
+### models.PermissionView
+
+|Name|Schema|
+|---|---|
+|**Description**  <br>*optional*|string|
+|**Title**  <br>*optional*|string|
+
 
 <a name="models-recorddata"></a>
 ### models.RecordData

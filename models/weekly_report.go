@@ -36,6 +36,7 @@ func RecordsGetWeeklyReport(o orm.Ormer, uid uint64) (report []*WeeklyReport, op
 	if dbErr != nil {
 		return nil, dbErr
 	}
+	report = []*WeeklyReport{}
 	for idx := range years {
 		report = append(report, &WeeklyReport{
 			Year:     years[idx],

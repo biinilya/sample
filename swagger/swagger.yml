@@ -138,6 +138,108 @@ paths:
           description: unauthorized
         "403":
           description: forbidden
+  /user/{uid}/permission:
+    get:
+      tags:
+      - user
+      description: delete the User
+      operationId: UserController.Add Permission
+      parameters:
+      - in: header
+        name: X-Access-Token
+        description: Access Token
+        required: true
+        type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.PermissionView'
+        "400":
+          description: bad request (uid is missing or is not a number)
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
+  /user/{uid}/permission/{title}:
+    post:
+      tags:
+      - user
+      description: delete the User
+      operationId: UserController.Add Permission
+      parameters:
+      - in: header
+        name: X-Access-Token
+        description: Access Token
+        required: true
+        type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: title
+        description: Title of Permission to Add to user
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.PermissionView'
+        "400":
+          description: bad request (uid is missing or is not a number)
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
+    delete:
+      tags:
+      - user
+      description: delete the User
+      operationId: UserController.Del Permission
+      parameters:
+      - in: header
+        name: X-Access-Token
+        description: Access Token
+        required: true
+        type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      - in: path
+        name: title
+        description: Title of Permission to Add to user
+        required: true
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.PermissionView'
+        "400":
+          description: bad request (uid is missing or is not a number)
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
   /user/{uid}/record/:
     get:
       tags:
@@ -349,6 +451,14 @@ paths:
         "403":
           description: forbidden
 definitions:
+  models.PermissionView:
+    title: PermissionView
+    type: object
+    properties:
+      Description:
+        type: string
+      Title:
+        type: string
   models.RecordData:
     title: RecordData
     type: object

@@ -24,3 +24,8 @@ const (
 	PERM_MANAGER = "manager"
 	PERM_ADMIN   = "admin"
 )
+
+type PermissionView struct {
+	Title       string `orm:"size(128);unique"`
+	Description string `orm:"type(longtext)"`
+}

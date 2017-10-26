@@ -35,6 +35,24 @@ func (u *User) AddPermission(o orm.Ormer, permTitle string) (err error) {
 	return
 }
 
+func (u *User) DelPermission(o orm.Ormer, permTitle string) (err error) {
+	var perm *Permission
+	if perm, err = PermissionByTitle(o, permTitle); err != nil {
+		return
+	}
+
+	for _, uPerm := range u.Permissions {
+		if perm.Id == uPerm.Id {
+			if _, err = o.QueryM2M(u, "Permissions").Remove(perm); err != nil {
+				return err
+			}
+		}
+	}
+	err = u.LoadById(o, uint64(u.Id))
+
+	return
+}
+
 func (u *User) HasPermission(permCode string) bool {
 	for _, uPerm := range u.Permissions {
 		if permCode == uPerm.Title {

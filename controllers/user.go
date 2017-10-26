@@ -17,6 +17,8 @@ type UserController struct {
 
 var userView = presenter.New().AddHook(
 	models.User{}, presenter.StructView().TranslateCase().Include("Id", "Key", "Created", "Updated"),
+).AddHook(
+	models.Permission{}, presenter.StructView().TranslateCase().Include("Title", "Description"),
 )
 
 // @Title Post
@@ -158,5 +160,67 @@ func (c *UserController) GetAll() {
 	}
 
 	c.Data["json"] = userView.AsJson(users)
+	c.ServeJSON()
+}
+
+// ListPerm ...
+// @Title Add Permission
+// @Description delete the User
+// @Param	X-Access-Token		header 	string	true		"Access Token"
+// @Param	uid		path 	uint64	true		"User ID"
+// @Success 200 {object} []models.PermissionView
+// @Failure 400 bad request (uid is missing or is not a number)
+// @Failure 401 unauthorized
+// @Failure 403 forbidden
+// @router /:uid/permission [get]
+func (c *UserController) ListPerm() {
+	c.RequirePerm(models.PERM_ADMIN)
+	var u = c.LoadUser()
+
+	c.Data["json"] = userView.AsJson(u.Permissions)
+	c.ServeJSON()
+}
+
+// AddPerm ...
+// @Title Add Permission
+// @Description delete the User
+// @Param	X-Access-Token		header 	string	true		"Access Token"
+// @Param	uid		path 	uint64	true		"User ID"
+// @Param	title	path 	string	true		"Title of Permission to Add to user"
+// @Success 200 {object} []models.PermissionView
+// @Failure 400 bad request (uid is missing or is not a number)
+// @Failure 401 unauthorized
+// @Failure 403 forbidden
+// @router /:uid/permission/:title [post]
+func (c *UserController) AddPerm() {
+	c.RequirePerm(models.PERM_ADMIN)
+	var u = c.LoadUser()
+	if dbErr := u.AddPermission(lib.GetDB(), c.GetString(":title")); dbErr != nil {
+		c.AbortWith(400, dbErr)
+	}
+
+	c.Data["json"] = userView.AsJson(u.Permissions)
+	c.ServeJSON()
+}
+
+// DelPerm ...
+// @Title Del Permission
+// @Description delete the User
+// @Param	X-Access-Token		header 	string	true		"Access Token"
+// @Param	uid		path 	uint64	true		"User ID"
+// @Param	title	path 	string	true		"Title of Permission to Add to user"
+// @Success 200 {object} []models.PermissionView
+// @Failure 400 bad request (uid is missing or is not a number)
+// @Failure 401 unauthorized
+// @Failure 403 forbidden
+// @router /:uid/permission/:title [delete]
+func (c *UserController) DelPerm() {
+	c.RequirePerm(models.PERM_ADMIN)
+	var u = c.LoadUser()
+	if dbErr := u.DelPermission(lib.GetDB(), c.GetString(":title")); dbErr != nil {
+		c.AbortWith(400, dbErr)
+	}
+
+	c.Data["json"] = userView.AsJson(u.Permissions)
 	c.ServeJSON()
 }

@@ -89,6 +89,30 @@ func init() {
 
 	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
 		beego.ControllerComments{
+			Method: "ListPerm",
+			Router: `/:uid/permission`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "AddPerm",
+			Router: `/:uid/permission/:title`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+		beego.ControllerComments{
+			Method: "DelPerm",
+			Router: `/:uid/permission/:title`,
+			AllowHTTPMethods: []string{"delete"},
+			MethodParams: param.Make(),
+			Params: nil})
+
+	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+		beego.ControllerComments{
 			Method: "SignIn",
 			Router: `/sign_in`,
 			AllowHTTPMethods: []string{"post"},
