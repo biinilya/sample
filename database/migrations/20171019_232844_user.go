@@ -19,6 +19,7 @@ func init() {
 
 // Run the migrations
 func (m *User_20171019_232844) Up() {
+	// default user secret is 764dcf370c1d4d4a99c7af29f767b43e
 	var create_stmt = `
 	CREATE TABLE IF NOT EXISTS "user" (
 		"id" serial NOT NULL PRIMARY KEY,
@@ -35,7 +36,18 @@ func (m *User_20171019_232844) Up() {
 		"permission_id" bigint references "permission" ("id") NOT NULL,
 		unique ("user_id", "permission_id")
 	);
+
+	INSERT INTO
+		"user" ("key", "secret", "created", "updated")
+	VALUES
+		('524ef15d3a8249109fb54ae71350b33a', '4af87c00d6a16a01b41b9c30de168a531fddad2f', NOW(), NOW());
+
+	INSERT INTO
+		"user_permissions" ("user_id", "permission_id")
+	VALUES
+		(1, 1), (1, 2), (1, 3);
 	`
+
 	m.SQL(create_stmt)
 }
 

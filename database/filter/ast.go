@@ -27,6 +27,7 @@ const (
 	CmpLt  Comprator = "<"
 	CmpLte Comprator = "<="
 	CmpEq  Comprator = "="
+	CmpNe  Comprator = "!="
 )
 
 const (
@@ -92,7 +93,13 @@ func (e *AST) AddArgument(t ParameterType, parameter string) {
 }
 
 func (e *AST) AddExpression() {
-	e.exprStack.Push(e.curExpr)
+	if e.curExpr.comparator == CmpNe {
+		e.curExpr.comparator = CmpEq
+		e.exprStack.Push(e.curExpr)
+		e.AddOperator(OpNot)
+	} else {
+		e.exprStack.Push(e.curExpr)
+	}
 	e.curExpr = expr{}
 }
 

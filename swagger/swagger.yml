@@ -128,6 +128,136 @@ paths:
           description: unauthorized
         "403":
           description: forbidden
+  /user/{uid}/record/:
+    get:
+      tags:
+      - user/:uid/record
+      description: Get all user-related records
+      operationId: RecordController.GetAll
+      parameters:
+      - in: header
+        name: X-Access-Token
+        description: Access Token
+        required: true
+        type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      - in: query
+        name: filter
+        description: Filter records e.x. (date = '2017-01-01')
+        type: string
+      responses:
+        "200":
+          description: ""
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/models.RecordView'
+        "400":
+          description: Bad request
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
+    post:
+      tags:
+      - user/:uid/record
+      description: create new Record, returns new record data
+      operationId: RecordController.Post
+      parameters:
+      - in: header
+        name: X-Access-Token
+        description: Access Token
+        required: true
+        type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: body
+        description: Record
+        required: true
+        schema:
+          $ref: '#/definitions/models.RecordData'
+      responses:
+        "201":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.RecordView'
+        "400":
+          description: Bad request
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
+  /user/{uid}/record/{record_id}:
+    put:
+      tags:
+      - user/:uid/record
+      description: update existing record, returns updated record data
+      operationId: RecordController.Put
+      parameters:
+      - in: header
+        name: X-Access-Token
+        description: Access Token
+        required: true
+        type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      - in: body
+        name: body
+        description: Record
+        required: true
+        schema:
+          $ref: '#/definitions/models.RecordData'
+      responses:
+        "200":
+          description: ""
+          schema:
+            $ref: '#/definitions/models.RecordView'
+        "400":
+          description: Bad request
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
+    delete:
+      tags:
+      - user/:uid/record
+      description: update existing record, returns updated record data
+      operationId: RecordController.Delete
+      parameters:
+      - in: header
+        name: X-Access-Token
+        description: Access Token
+        required: true
+        type: string
+      - in: path
+        name: uid
+        description: User ID
+        required: true
+        type: integer
+        format: int64
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+        "401":
+          description: unauthorized
+        "403":
+          description: forbidden
   /user/sign_in:
     post:
       tags:
@@ -152,6 +282,47 @@ paths:
         "403":
           description: forbidden
 definitions:
+  models.RecordData:
+    title: RecordData
+    type: object
+    properties:
+      date:
+        type: string
+        format: string
+      distance:
+        type: number
+        format: double
+      duration:
+        type: number
+        format: double
+      latitude:
+        type: number
+        format: double
+      longitude:
+        type: number
+        format: double
+  models.RecordView:
+    title: RecordView
+    type: object
+    properties:
+      date:
+        type: string
+        format: string
+      distance:
+        type: number
+        format: double
+      duration:
+        type: number
+        format: double
+      id:
+        type: integer
+        format: int64
+      latitude:
+        type: number
+        format: double
+      longitude:
+        type: number
+        format: double
   models.UserAccessTokenView:
     title: UserAccessTokenView
     type: object
@@ -188,3 +359,6 @@ tags:
 - name: user
   description: |2
      UserController operations for User
+- name: user/:uid/record
+  description: |2
+     RecordController operations for Record

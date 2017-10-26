@@ -79,45 +79,50 @@ func TestCalculator(t *testing.T) {
 
 	Convey("Our calculator should work", t, func() {
 		testExpression(
-			`created_at>'2017-01-01'`,
+			`created_at gt '2017-01-01'`,
 			`"created_at" > ?`,
 			`2017-01-01`,
 		)
 		testExpression(
-			`(created_at > '2017-01-01') AND (value < 19)`,
+			`(created_at gt '2017-01-01') AND (value lt 19)`,
 			`("created_at" > ?) AND ("value" < ?)`,
 			`2017-01-01`, 19,
 		)
 		testExpression(
-			`(key = '032ae64df1ab4c4dafc139f6c26cb647')`,
+			`(key eq '032ae64df1ab4c4dafc139f6c26cb647')`,
 			`"key" = ?`,
 			`032ae64df1ab4c4dafc139f6c26cb647`,
 		)
 		testExpression(
-			`(created_at > '2017-01-01' AND value < 19) OR death = 1`,
+			`(created_at gt '2017-01-01' AND value lt 19) OR death eq 1`,
 			`(("created_at" > ?) AND ("value" < ?)) OR ("death" = ?)`,
 			`2017-01-01`, 19, 1,
 		)
 		testExpression(
-			`created_at > '2017-01-01' AND value < 19 OR death = 1`,
+			`(created_at gt '2017-01-01' AND value lt 19) OR death ne 1`,
+			`(("created_at" > ?) AND ("value" < ?)) OR (NOT ("death" = ?))`,
+			`2017-01-01`, 19, 1,
+		)
+		testExpression(
+			`created_at gt '2017-01-01' AND value lt 19 OR death eq 1`,
 			`(("created_at" > ?) AND ("value" < ?)) OR ("death" = ?)`,
 			`2017-01-01`, 19, 1,
 		)
 		testExpression(
-			`(created_at > '2017-01-01' AND value < 19) OR NOT death = 1`,
+			`(created_at gt '2017-01-01' AND value lt 19) OR NOT death eq 1`,
 			`(("created_at" > ?) AND ("value" < ?)) OR (NOT ("death" = ?))`,
 			`2017-01-01`, 19, 1,
 		)
 		testBrokenExpression(
-			`created_at >> '2017-01-01'`,
-			`created_at > ||>||  '2017-01-01'`,
+			`created_at gt> '2017-01-01'`,
+			`created_at g ||t>||  '2017-01-01'`,
 		)
 		testBrokenExpression(
-			`(created_at > '2017-01-01') AND (value < 19)x`,
-			`(created_at > '2017-01-01') AND (value < 19) ||x|| `,
+			`(created_at gt '2017-01-01') AND (value lt 19)x`,
+			`(created_at gt '2017-01-01') AND (value lt 19) ||x|| `,
 		)
 		testForbiddenFieldsExpression(
-			`created > '2017-01-01'`,
+			`created gt '2017-01-01'`,
 			`field 'created' is not allowed to filter in`,
 		)
 	})

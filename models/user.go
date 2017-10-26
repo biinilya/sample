@@ -12,8 +12,8 @@ type User struct {
 	Id          int64         `orm:"auto"`
 	Key         string        `orm:"size(128);index"`
 	Secret      string        `orm:"size(128)"`
-	Created     time.Time     `orm:"auto_now_add;type(datetime)"`
-	Updated     time.Time     `orm:"auto_now;type(datetime)"`
+	Created     time.Time     `orm:"auto_now_add;type(date)"`
+	Updated     time.Time     `orm:"auto_now;type(date)"`
 	Permissions []*Permission `orm:"rel(m2m)"`
 	Records     []*Record     `orm:"reverse(many)"`
 }
@@ -100,6 +100,7 @@ func (u *User) Delete(o orm.Ormer) (opErr error) {
 }
 
 func UsersGetAll(o orm.Ormer, cond *orm.Condition) (users []*User, opErr error) {
+	users = []*User{}
 	if _, opErr = o.QueryTable(User{}).SetCond(cond).All(&users); opErr != nil {
 		return
 	}

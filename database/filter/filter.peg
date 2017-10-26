@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style
 # license that can be found in the LICENSE file.
 
-package main
+package filter
 
 type FilterPeg Peg {
   AST
@@ -13,23 +13,22 @@ e1 <- e2 ( and e2 { p.AddOperator(OpAnd) } / or e2 { p.AddOperator(OpOr) } )*
 e2 <- not value { p.AddOperator(OpNot) } / value
 value <- expression sp / open e1 close
 
-and <- 'AND' sp
-or <- 'OR' sp
-not <- 'NOT' sp
+and <- 'AND' sp / 'and' sp
+or <- 'OR' sp  / 'or' sp
+not <- 'NOT' sp / 'not' sp
 
 open <- '(' sp
 close <- ')' sp
 
-gt <- '>' { p.AddComparator(CmpGt) }
-gte <- '>=' { p.AddComparator(CmpGte) }
-lt <- '<' { p.AddComparator(CmpLt) }
-lte <- '<=' { p.AddComparator(CmpLte) }
-eq <- '=' { p.AddComparator(CmpEq) }
+gt <- 'gt' sp { p.AddComparator(CmpGt) }
+lt <- 'lt' sp { p.AddComparator(CmpLt) }
+eq <- 'eq' sp { p.AddComparator(CmpEq) }
+ne <- 'ne' sp { p.AddComparator(CmpNe) }
 
 quote <- '\''
 
 expression <- (identifier sp comparator sp parameter) { p.AddExpression() }
-comparator <- gt / gte / lt / lte / eq
+comparator <- gt / lt / eq / ne
 identifier <- <[a-zA-Z][a-zA-Z0-9_]*> { p.AddIdentifier(buffer[begin:end]) }
 p_string <- quote <[^']+> quote { p.AddArgument(TypeString, buffer[begin:end]) }
 p_number <- <[0-9]+> { p.AddArgument(TypeInt, buffer[begin:end]) }

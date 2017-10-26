@@ -7,6 +7,38 @@ import (
 
 func init() {
 
+	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+		beego.ControllerComments{
+			Method:           "Post",
+			Router:           `/`,
+			AllowHTTPMethods: []string{"post"},
+			MethodParams:     param.Make(),
+			Params:           nil})
+
+	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+		beego.ControllerComments{
+			Method:           "GetAll",
+			Router:           `/`,
+			AllowHTTPMethods: []string{"get"},
+			MethodParams:     param.Make(),
+			Params:           nil})
+
+	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+		beego.ControllerComments{
+			Method:           "Put",
+			Router:           `/:record_id`,
+			AllowHTTPMethods: []string{"put"},
+			MethodParams:     param.Make(),
+			Params:           nil})
+
+	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+		beego.ControllerComments{
+			Method:           "Delete",
+			Router:           `/:record_id`,
+			AllowHTTPMethods: []string{"delete"},
+			MethodParams:     param.Make(),
+			Params:           nil})
+
 	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "Post",

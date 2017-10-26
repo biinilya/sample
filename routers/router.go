@@ -17,6 +17,11 @@ func init() {
 				&controllers.UserController{},
 			),
 		),
+		beego.NSNamespace("/user/:uid/record",
+			beego.NSInclude(
+				&controllers.RecordController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

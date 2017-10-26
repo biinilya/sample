@@ -23,18 +23,16 @@ func (m *Permissions_20171016_182723) Up() {
 		"title" varchar(128) NOT NULL UNIQUE,
 		"description" text NOT NULL DEFAULT ''
 	);
-	`
-	var embedded_permissions = `
+
 	INSERT INTO
-		permission (title, description)
+		permission (id, title, description)
 	VALUES
-		('user', 'can only access own records'),
-		('manager', 'can only access users'),
-		('admin', 'can access both all records and users')
+		(1, 'user', 'can only access own records'),
+		(2, 'manager', 'can only access users'),
+		(3, 'admin', 'can access both all records and users');
 	`
 
 	m.SQL(create_table)
-	m.SQL(embedded_permissions)
 }
 
 // Reverse the migrations

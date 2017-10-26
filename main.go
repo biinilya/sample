@@ -5,6 +5,8 @@ import (
 
 	_ "github.com/lib/pq"
 
+	"toptal/services/weather"
+
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
 )
@@ -16,7 +18,7 @@ func main() {
 	orm.RegisterDataBase(
 		"default",
 		"postgres",
-		"postgres://ibiin@localhost:5432/toptal?sslmode=disable",
+		beego.AppConfig.String("DbConn"),
 	)
 
 	if beego.BConfig.RunMode == "dev" {
@@ -24,14 +26,6 @@ func main() {
 		beego.BConfig.WebConfig.StaticDir["/swagger"] = "swagger"
 	}
 
-	//ns := beego.NewNamespace("/api/v1",
-	//	beego.NSNamespace("/user",
-	//		beego.NSInclude(
-	//			&controllers.UserController{},
-	//		),
-	//	),
-	//)
-	//beego.AddNamespace(ns)
-
+	weather.Init()
 	beego.Run()
 }

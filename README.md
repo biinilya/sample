@@ -60,6 +60,7 @@ Users Directory
 |Type|Name|Description|Schema|
 |---|---|---|---|
 |**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
+|**Query**|**filter**  <br>*optional*|Filter users e.x. (key = 'xxx')|string|
 
 
 #### Responses
@@ -96,7 +97,7 @@ Use this method to receive Access Token which is required for API access
 |---|---|---|
 |**200**||[models.UserAccessTokenView](#models-useraccesstokenview)|
 |**400**|bad request|No Content|
-|**401**|wrong credentials|No Content|
+|**403**|forbidden|No Content|
 
 
 #### Tags

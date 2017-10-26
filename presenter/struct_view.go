@@ -3,6 +3,12 @@ package presenter
 import (
 	"reflect"
 
+	"time"
+
+	"fmt"
+
+	"errors"
+
 	"github.com/serenize/snaker"
 )
 
@@ -68,17 +74,55 @@ func (as *structView) Map2Struct(in map[string]interface{}, model interface{}) {
 	val := reflect.ValueOf(model).Elem()
 	valType := reflect.TypeOf(model).Elem()
 	for key, in_val_iface := range in {
-		var inVal = reflect.ValueOf(in_val_iface)
 		key = as.snakeToCamel(key)
 		if as.exclude != nil && as.exclude[key] {
 			continue
 		}
 		if as.include == nil || as.include[key] {
-			if _, ok := valType.FieldByName(key); ok {
-				val.FieldByName(key).Set(inVal)
+			if field, ok := valType.FieldByName(key); ok {
+				val.FieldByName(key).Set(convertValue(in_val_iface, field.Type))
 			}
 		}
 	}
+}
+
+func convertValue(in interface{}, out reflect.Type) reflect.Value {
+	var inType = reflect.TypeOf(in)
+	var inValue = reflect.ValueOf(in)
+	if inType == out {
+		return inValue
+	}
+	switch {
+	case out == reflect.TypeOf(time.Time{}):
+		switch inType.Kind() {
+		case reflect.String:
+			for _, format := range []string{time.RFC3339, "2006-01-02T15:04:05", "2006-01-02"} {
+				if d, dErr := time.Parse(format, in.(string)); dErr == nil {
+					return reflect.ValueOf(d)
+				}
+			}
+			panic(errors.New(fmt.Sprintf("Cannot parse '%s' as 'time.Time'", in.(string))))
+		}
+	case out.Kind() == reflect.Float32:
+		switch {
+		case inType.Kind() == reflect.Int ||
+			inType.Kind() == reflect.Int8 ||
+			inType.Kind() == reflect.Int16 ||
+			inType.Kind() == reflect.Int32 ||
+			inType.Kind() == reflect.Int64:
+			return reflect.ValueOf(float32(inValue.Int()))
+		}
+	case out.Kind() == reflect.Float64:
+		switch {
+		case inType.Kind() == reflect.Int ||
+			inType.Kind() == reflect.Int8 ||
+			inType.Kind() == reflect.Int16 ||
+			inType.Kind() == reflect.Int32 ||
+			inType.Kind() == reflect.Int64:
+			return reflect.ValueOf(float64(inValue.Int()))
+		}
+	}
+	return inValue
 }
 
 func StructView() *structView {

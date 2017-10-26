@@ -98,11 +98,7 @@ func (c *UserController) GetOne() {
 // @Failure 403 forbidden
 // @router /:uid/credentials [put]
 func (c *UserController) Put() {
-	var uid, uidErr = c.GetUint64(":uid")
-	if uidErr != nil {
-		c.AbortWith(400, "Invalid :uid")
-	}
-	var u = c.RequireOwnerOrPerm(uid, models.PERM_MANAGER, models.PERM_ADMIN)
+	var u = c.RequireOwnerOrPerm(models.PERM_MANAGER, models.PERM_ADMIN)
 
 	var secret, dbErr = u.NewCred(lib.GetDB())
 	if dbErr != nil {
@@ -117,29 +113,6 @@ func (c *UserController) Put() {
 	c.ServeJSON()
 }
 
-// GetAll ...
-// @Title Get All
-// @Description Users Directory
-// @Param	X-Access-Token		header 	string	true		"Access Token"
-// @Param	filter		query 	string	false		"Filter users e.x. (key = 'xxx')"
-// @Success 200 {object} []models.UserInfoView
-// @Failure 401 unauthorized
-// @Failure 403 forbidden
-// @router / [get]
-func (c *UserController) GetAll() {
-	var f = c.LoadFilter("key")
-	c.RequirePerm(models.PERM_MANAGER, models.PERM_ADMIN)
-
-	var users []*models.User
-	var opErr error
-	if users, opErr = models.UsersGetAll(lib.GetDB(), f); opErr != nil {
-		c.AbortWith(500, opErr)
-	}
-
-	c.Data["json"] = userView.AsJson(users)
-	c.ServeJSON()
-}
-
 // Delete ...
 // @Title Delete
 // @Description delete the User
@@ -151,16 +124,35 @@ func (c *UserController) GetAll() {
 // @Failure 403 forbidden
 // @router /:uid [delete]
 func (c *UserController) Delete() {
-	var uid, uidErr = c.GetUint64(":uid")
-	if uidErr != nil {
-		c.AbortWith(400, "Invalid :uid")
-	}
-	var u = c.RequireOwnerOrPerm(uid, models.PERM_MANAGER, models.PERM_ADMIN)
+	var u = c.RequireOwnerOrPerm(models.PERM_MANAGER, models.PERM_ADMIN)
 
 	var dbErr = u.Delete(lib.GetDB())
 	if dbErr != nil {
 		c.AbortWith(500, dbErr)
 	}
 	c.Data["json"] = userView.AsJson(u)
+	c.ServeJSON()
+}
+
+// GetAll ...
+// @Title Get All
+// @Description Users Directory
+// @Param	X-Access-Token		header 	string	true		"Access Token"
+// @Param	filter		query 	string	false		"Filter users e.x. (key = 'xxx')"
+// @Success 200 {object} []models.UserInfoView
+// @Failure 401 unauthorized
+// @Failure 403 forbidden
+// @router / [get]
+func (c *UserController) GetAll() {
+	var f = c.LoadFilter("key", "created", "updated")
+	c.RequirePerm(models.PERM_MANAGER, models.PERM_ADMIN)
+
+	var users []*models.User
+	var opErr error
+	if users, opErr = models.UsersGetAll(lib.GetDB(), f); opErr != nil {
+		c.AbortWith(500, opErr)
+	}
+
+	c.Data["json"] = userView.AsJson(users)
 	c.ServeJSON()
 }

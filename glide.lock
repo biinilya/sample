@@ -1,5 +1,5 @@
 hash: 83bfe7a972499f4bf1b3b08e3e63e6e49389a62063fa27059785893e1682fce3
-updated: 2017-10-24T14:11:58.486045+03:00
+updated: 2017-10-26T18:30:59.931556+03:00
 imports:
 - name: github.com/astaxie/beego
   version: d96289a81bf67728cff7a19b067aaecc65a62ec6
@@ -17,7 +17,12 @@ imports:
 - name: github.com/emirpasic/gods
   version: f6c17b524822278a87e3b3bd809fec33b51f5b46
   subpackages:
+  - containers
+  - lists
+  - lists/singlylinkedlist
+  - stacks
   - stacks/linkedliststack
+  - utils
 - name: github.com/golang/mock
   version: 13f360950a79f5864a972c786a10a50e44b69541
   subpackages:
@@ -31,7 +36,7 @@ imports:
 - name: github.com/serenize/snaker
   version: c7a77c38c398a5468cac9579c3b2b1de22fb4da6
 - name: github.com/ugorji/go
-  version: 6ac03ac41984930e078e8cba751fb0825f17cc4f
+  version: 16373bd7016380b084e8a4e8f9560efe82cbc98c
   subpackages:
   - codec
 testImports:
