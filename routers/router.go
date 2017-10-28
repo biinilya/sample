@@ -1,11 +1,11 @@
 // @APIVersion 1.0.0
-// @Title Toptal demo app (Run Keeper)
+// @Title sample demo app (Run Keeper)
 // @Description This RunKeeper API allows you to manage users run data
 // @Contact me@ilyabiin.com
 package routers
 
 import (
-	"toptal/controllers"
+	"sample/controllers"
 
 	"github.com/astaxie/beego"
 )

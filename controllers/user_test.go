@@ -9,10 +9,10 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"toptal/lib"
-	"toptal/models"
-	"toptal/tests"
-	"toptal/tests/controllers"
+	"sample/lib"
+	"sample/models"
+	"sample/tests"
+	"sample/tests/controllers"
 )
 
 func TestUserController(t *testing.T) {

@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  title: Toptal demo app (Run Keeper)
+  title: sample demo app (Run Keeper)
   description: This RunKeeper API allows you to manage users run data
   version: 1.0.0
   contact:

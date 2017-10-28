@@ -1,4 +1,4 @@
-# Toptal demo app (Run Keeper)
+# sample demo app (Run Keeper)
 
 
 <a name="overview"></a>

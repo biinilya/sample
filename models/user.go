@@ -3,7 +3,7 @@ package models
 import (
 	"time"
 
-	"toptal/lib"
+	"sample/lib"
 
 	"github.com/astaxie/beego/orm"
 )

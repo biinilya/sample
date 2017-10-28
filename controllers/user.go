@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"toptal/lib"
-	"toptal/models"
-	"toptal/presenter"
+	"sample/lib"
+	"sample/models"
+	"sample/presenter"
 
 	"encoding/json"
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "toptal/models"
+	_ "sample/models"
 
 	"github.com/astaxie/beego/orm"
 	_ "github.com/lib/pq"
@@ -12,7 +12,7 @@ func main() {
 	orm.RegisterDataBase(
 		"default",
 		"postgres",
-		"postgres://ibiin@localhost:5432/toptal?sslmode=disable",
+		"postgres://ibiin@localhost:5432/sample?sslmode=disable",
 	)
 
 	orm.RunCommand()

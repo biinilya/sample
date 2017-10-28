@@ -7,7 +7,7 @@ import (
 
 func init() {
 
-	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+	beego.GlobalControllerRouter["sample/controllers:RecordController"] = append(beego.GlobalControllerRouter["sample/controllers:RecordController"],
 		beego.ControllerComments{
 			Method:           "Post",
 			Router:           `/`,
@@ -15,7 +15,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+	beego.GlobalControllerRouter["sample/controllers:RecordController"] = append(beego.GlobalControllerRouter["sample/controllers:RecordController"],
 		beego.ControllerComments{
 			Method:           "GetAll",
 			Router:           `/`,
@@ -23,7 +23,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+	beego.GlobalControllerRouter["sample/controllers:RecordController"] = append(beego.GlobalControllerRouter["sample/controllers:RecordController"],
 		beego.ControllerComments{
 			Method:           "Put",
 			Router:           `/:record_id`,
@@ -31,7 +31,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+	beego.GlobalControllerRouter["sample/controllers:RecordController"] = append(beego.GlobalControllerRouter["sample/controllers:RecordController"],
 		beego.ControllerComments{
 			Method:           "Delete",
 			Router:           `/:record_id`,
@@ -39,7 +39,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:RecordController"] = append(beego.GlobalControllerRouter["toptal/controllers:RecordController"],
+	beego.GlobalControllerRouter["sample/controllers:RecordController"] = append(beego.GlobalControllerRouter["sample/controllers:RecordController"],
 		beego.ControllerComments{
 			Method:           "WeeklyReport",
 			Router:           `/report/weekly`,
@@ -47,7 +47,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+	beego.GlobalControllerRouter["sample/controllers:UserController"] = append(beego.GlobalControllerRouter["sample/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "Post",
 			Router:           `/`,
@@ -55,7 +55,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+	beego.GlobalControllerRouter["sample/controllers:UserController"] = append(beego.GlobalControllerRouter["sample/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "GetAll",
 			Router:           `/`,
@@ -63,7 +63,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+	beego.GlobalControllerRouter["sample/controllers:UserController"] = append(beego.GlobalControllerRouter["sample/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "GetOne",
 			Router:           `/:uid`,
@@ -71,7 +71,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+	beego.GlobalControllerRouter["sample/controllers:UserController"] = append(beego.GlobalControllerRouter["sample/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "Delete",
 			Router:           `/:uid`,
@@ -79,7 +79,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+	beego.GlobalControllerRouter["sample/controllers:UserController"] = append(beego.GlobalControllerRouter["sample/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "Put",
 			Router:           `/:uid/credentials`,
@@ -87,7 +87,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+	beego.GlobalControllerRouter["sample/controllers:UserController"] = append(beego.GlobalControllerRouter["sample/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "ListPerm",
 			Router:           `/:uid/permission`,
@@ -95,7 +95,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+	beego.GlobalControllerRouter["sample/controllers:UserController"] = append(beego.GlobalControllerRouter["sample/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "AddPerm",
 			Router:           `/:uid/permission/:title`,
@@ -103,7 +103,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+	beego.GlobalControllerRouter["sample/controllers:UserController"] = append(beego.GlobalControllerRouter["sample/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "DelPerm",
 			Router:           `/:uid/permission/:title`,
@@ -111,7 +111,7 @@ func init() {
 			MethodParams:     param.Make(),
 			Params:           nil})
 
-	beego.GlobalControllerRouter["toptal/controllers:UserController"] = append(beego.GlobalControllerRouter["toptal/controllers:UserController"],
+	beego.GlobalControllerRouter["sample/controllers:UserController"] = append(beego.GlobalControllerRouter["sample/controllers:UserController"],
 		beego.ControllerComments{
 			Method:           "SignIn",
 			Router:           `/sign_in`,

@@ -5,9 +5,9 @@ import (
 	"github.com/astaxie/beego/orm"
 
 	"fmt"
-	"toptal/tests"
+	"sample/tests"
 
-	_ "toptal/tests/controllers/routers"
+	_ "sample/tests/controllers/routers"
 )
 
 func SetUp(path string, ctrl beego.ControllerInterface) {

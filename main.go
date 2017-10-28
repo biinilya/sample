@@ -1,11 +1,11 @@
 package main
 
 import (
-	_ "toptal/routers"
+	_ "sample/routers"
 
 	_ "github.com/lib/pq"
 
-	"toptal/services/weather"
+	"sample/services/weather"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"

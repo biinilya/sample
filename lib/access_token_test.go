@@ -6,7 +6,7 @@ import (
 
 	. "github.com/smartystreets/goconvey/convey"
 
-	_ "toptal/tests"
+	_ "sample/tests"
 )
 
 func TestAccessTokenFunc(t *testing.T) {

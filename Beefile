@@ -10,5 +10,5 @@ cmd_args: []
 envs: []
 database:
   driver: "postgres"
-  conn: postgres://ibiin@localhost:5432/toptal?sslmode=disable
+  conn: postgres://ibiin@localhost:5432/sample?sslmode=disable
 enable_reload: false

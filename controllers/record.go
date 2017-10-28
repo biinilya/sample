@@ -2,10 +2,10 @@ package controllers
 
 import (
 	"encoding/json"
-	"toptal/lib"
-	"toptal/models"
-	"toptal/presenter"
-	"toptal/services/weather"
+	"sample/lib"
+	"sample/models"
+	"sample/presenter"
+	"sample/services/weather"
 )
 
 //  RecordController operations for Record

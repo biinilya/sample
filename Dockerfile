@@ -6,11 +6,11 @@ RUN go get github.com/tools/godep
 # Recompile the standard library without CGO
 RUN CGO_ENABLED=0 go install -a std
 
-ENV APP_DIR $GOPATH/src/toptal
+ENV APP_DIR $GOPATH/src/sample
 RUN mkdir -p $APP_DIR
 
 # Set the entrypoint
-ENTRYPOINT (cd $APP_DIR && ./toptal)
+ENTRYPOINT (cd $APP_DIR && ./sample)
 ADD . $APP_DIR
 
 # Compile the binary and statically link

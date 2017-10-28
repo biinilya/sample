@@ -1,4 +1,4 @@
-package: toptal
+package: sample
 import:
 - package: github.com/astaxie/beego
   version: ~1.9.0

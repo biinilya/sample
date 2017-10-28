@@ -1,9 +1,9 @@
 package controllers
 
 import (
-	"toptal/database/filter"
-	"toptal/lib"
-	"toptal/models"
+	"sample/database/filter"
+	"sample/lib"
+	"sample/models"
 
 	"fmt"
 
