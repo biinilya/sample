@@ -7,4 +7,4 @@ docker run --rm -v \
     -i /opt/swagger.yml \
     -f /opt/swagger \
     -c /opt/config.properties
-cp $(pwd)/swagger/swagger.md README.md
+sed -e 's|<a name.*||g' -e 's/<br>//g' $(pwd)/swagger/swagger.md > README.md

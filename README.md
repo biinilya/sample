@@ -1,7 +1,7 @@
 # sample demo app (Run Keeper)
 
 
-<a name="overview"></a>
+
 ## Overview
 This RunKeeper API allows you to manage users run data
 
@@ -28,10 +28,10 @@ This RunKeeper API allows you to manage users run data
 
 
 
-<a name="paths"></a>
+
 ## Paths
 
-<a name="usercontroller-post"></a>
+
 ### POST /user/
 
 #### Description
@@ -50,7 +50,7 @@ create new User, returns key and secret used to authorize
 * user
 
 
-<a name="usercontroller-get-all"></a>
+
 ### GET /user/
 
 #### Description
@@ -61,10 +61,10 @@ Users Directory
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Query**|**filter**  <br>*optional*|Filter users e.x. (key eq 'xxx')|string|
-|**Query**|**limit**  <br>*optional*|Limit number of records to (default 50)|integer (int64)|
-|**Query**|**offset**  <br>*optional*|Offset in records|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Query**|**filter**  *optional*|Filter users e.x. (key eq 'xxx')|string|
+|**Query**|**limit**  *optional*|Limit number of records to (default 50)|integer (int64)|
+|**Query**|**offset**  *optional*|Offset in records|integer (int64)|
 
 
 #### Responses
@@ -81,7 +81,7 @@ Users Directory
 * user
 
 
-<a name="usercontroller-signin"></a>
+
 ### POST /user/sign_in
 
 #### Description
@@ -92,7 +92,7 @@ Use this method to receive Access Token which is required for API access
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Body**|**body**  <br>*required*|Credentials to Sign In|[models.UserCredentialsData](#models-usercredentialsdata)|
+|**Body**|**body**  *required*|Credentials to Sign In|[models.UserCredentialsData](#models-usercredentialsdata)|
 
 
 #### Responses
@@ -109,7 +109,7 @@ Use this method to receive Access Token which is required for API access
 * user
 
 
-<a name="usercontroller-get-one"></a>
+
 ### GET /user/{uid}
 
 #### Description
@@ -120,8 +120,8 @@ get User
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
 
 
 #### Responses
@@ -138,7 +138,7 @@ get User
 * user
 
 
-<a name="usercontroller-delete"></a>
+
 ### DELETE /user/{uid}
 
 #### Description
@@ -149,8 +149,8 @@ delete the User
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
 
 
 #### Responses
@@ -168,7 +168,7 @@ delete the User
 * user
 
 
-<a name="usercontroller-put"></a>
+
 ### PUT /user/{uid}/credentials
 
 #### Description
@@ -179,8 +179,8 @@ generate new User credentials
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
 
 
 #### Responses
@@ -198,7 +198,7 @@ generate new User credentials
 * user
 
 
-<a name="usercontroller-add-permission"></a>
+
 ### GET /user/{uid}/permission
 
 #### Description
@@ -209,8 +209,8 @@ delete the User
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
 
 
 #### Responses
@@ -228,7 +228,7 @@ delete the User
 * user
 
 
-<a name="usercontroller-add-permission"></a>
+
 ### POST /user/{uid}/permission/{title}
 
 #### Description
@@ -239,9 +239,9 @@ delete the User
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**title**  <br>*required*|Title of Permission to Add to user|string|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**title**  *required*|Title of Permission to Add to user|string|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
 
 
 #### Responses
@@ -259,7 +259,7 @@ delete the User
 * user
 
 
-<a name="usercontroller-del-permission"></a>
+
 ### DELETE /user/{uid}/permission/{title}
 
 #### Description
@@ -270,9 +270,9 @@ delete the User
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**title**  <br>*required*|Title of Permission to Add to user|string|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**title**  *required*|Title of Permission to Add to user|string|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
 
 
 #### Responses
@@ -290,7 +290,7 @@ delete the User
 * user
 
 
-<a name="recordcontroller-post"></a>
+
 ### POST /user/{uid}/record/
 
 #### Description
@@ -301,9 +301,9 @@ create new Record, returns new record data
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
-|**Body**|**body**  <br>*required*|Record|[models.RecordData](#models-recorddata)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
+|**Body**|**body**  *required*|Record|[models.RecordData](#models-recorddata)|
 
 
 #### Responses
@@ -322,7 +322,7 @@ create new Record, returns new record data
 * user/:uid/record
 
 
-<a name="recordcontroller-getall"></a>
+
 ### GET /user/{uid}/record/
 
 #### Description
@@ -333,11 +333,11 @@ Get all user-related records
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
-|**Query**|**filter**  <br>*optional*|Filter records e.x. (date eq '2017-01-01')|string|
-|**Query**|**limit**  <br>*optional*|Limit number of records to (default 50)|integer (int64)|
-|**Query**|**offset**  <br>*optional*|Offset in records|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
+|**Query**|**filter**  *optional*|Filter records e.x. (date eq '2017-01-01')|string|
+|**Query**|**limit**  *optional*|Limit number of records to (default 50)|integer (int64)|
+|**Query**|**offset**  *optional*|Offset in records|integer (int64)|
 
 
 #### Responses
@@ -355,7 +355,7 @@ Get all user-related records
 * user/:uid/record
 
 
-<a name="recordcontroller-weeklyreport"></a>
+
 ### GET /user/{uid}/record/report/weekly
 
 #### Description
@@ -366,8 +366,8 @@ Get average distance and duration per week
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
 
 
 #### Responses
@@ -385,7 +385,7 @@ Get average distance and duration per week
 * user/:uid/record
 
 
-<a name="recordcontroller-put"></a>
+
 ### PUT /user/{uid}/record/{record_id}
 
 #### Description
@@ -396,10 +396,10 @@ update existing record, returns updated record data
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**record_id**  <br>*required*|Record ID|integer (int64)|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
-|**Body**|**body**  <br>*required*|Record|[models.RecordData](#models-recorddata)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**record_id**  *required*|Record ID|integer (int64)|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
+|**Body**|**body**  *required*|Record|[models.RecordData](#models-recorddata)|
 
 
 #### Responses
@@ -417,7 +417,7 @@ update existing record, returns updated record data
 * user/:uid/record
 
 
-<a name="recordcontroller-delete"></a>
+
 ### DELETE /user/{uid}/record/{record_id}
 
 #### Description
@@ -428,9 +428,9 @@ update existing record, returns updated record data
 
 |Type|Name|Description|Schema|
 |---|---|---|---|
-|**Header**|**X-Access-Token**  <br>*required*|Access Token|string|
-|**Path**|**record_id**  <br>*required*|Record ID|integer (int64)|
-|**Path**|**uid**  <br>*required*|User ID|integer (int64)|
+|**Header**|**X-Access-Token**  *required*|Access Token|string|
+|**Path**|**record_id**  *required*|Record ID|integer (int64)|
+|**Path**|**uid**  *required*|User ID|integer (int64)|
 
 
 #### Responses
@@ -450,96 +450,96 @@ update existing record, returns updated record data
 
 
 
-<a name="definitions"></a>
+
 ## Definitions
 
-<a name="models-permissionview"></a>
+
 ### models.PermissionView
 
 |Name|Schema|
 |---|---|
-|**Description**  <br>*optional*|string|
-|**Title**  <br>*optional*|string|
+|**Description**  *optional*|string|
+|**Title**  *optional*|string|
 
 
-<a name="models-recorddata"></a>
+
 ### models.RecordData
 
 |Name|Schema|
 |---|---|
-|**date**  <br>*optional*|string (string)|
-|**distance**  <br>*optional*|number (double)|
-|**duration**  <br>*optional*|number (double)|
-|**latitude**  <br>*optional*|number (double)|
-|**longitude**  <br>*optional*|number (double)|
+|**date**  *optional*|string (string)|
+|**distance**  *optional*|number (double)|
+|**duration**  *optional*|number (double)|
+|**latitude**  *optional*|number (double)|
+|**longitude**  *optional*|number (double)|
 
 
-<a name="models-recordview"></a>
+
 ### models.RecordView
 
 |Name|Schema|
 |---|---|
-|**date**  <br>*optional*|string (string)|
-|**distance**  <br>*optional*|number (double)|
-|**duration**  <br>*optional*|number (double)|
-|**id**  <br>*optional*|integer (int64)|
-|**latitude**  <br>*optional*|number (double)|
-|**longitude**  <br>*optional*|number (double)|
-|**weather**  <br>*optional*|[models.WeatherInfo](#models-weatherinfo)|
+|**date**  *optional*|string (string)|
+|**distance**  *optional*|number (double)|
+|**duration**  *optional*|number (double)|
+|**id**  *optional*|integer (int64)|
+|**latitude**  *optional*|number (double)|
+|**longitude**  *optional*|number (double)|
+|**weather**  *optional*|[models.WeatherInfo](#models-weatherinfo)|
 
 
-<a name="models-useraccesstokenview"></a>
+
 ### models.UserAccessTokenView
 
 |Name|Schema|
 |---|---|
-|**access-token**  <br>*optional*|string|
+|**access-token**  *optional*|string|
 
 
-<a name="models-usercredentialsdata"></a>
+
 ### models.UserCredentialsData
 
 |Name|Schema|
 |---|---|
-|**key**  <br>*optional*|string|
-|**secret**  <br>*optional*|string|
+|**key**  *optional*|string|
+|**secret**  *optional*|string|
 
 
-<a name="models-usercredentialsview"></a>
+
 ### models.UserCredentialsView
 
 |Name|Schema|
 |---|---|
-|**id**  <br>*optional*|integer (int64)|
-|**key**  <br>*optional*|string|
-|**secret**  <br>*optional*|string|
+|**id**  *optional*|integer (int64)|
+|**key**  *optional*|string|
+|**secret**  *optional*|string|
 
 
-<a name="models-userinfoview"></a>
+
 ### models.UserInfoView
 
 |Name|Schema|
 |---|---|
-|**created**  <br>*optional*|string (string)|
-|**id**  <br>*optional*|integer (int64)|
-|**key**  <br>*optional*|string|
-|**updated**  <br>*optional*|string (string)|
+|**created**  *optional*|string (string)|
+|**id**  *optional*|integer (int64)|
+|**key**  *optional*|string|
+|**updated**  *optional*|string (string)|
 
 
-<a name="models-weatherinfo"></a>
+
 ### models.WeatherInfo
 *Type* : object
 
 
-<a name="models-weeklyreport"></a>
+
 ### models.WeeklyReport
 
 |Name|Schema|
 |---|---|
-|**avg_distance**  <br>*optional*|number (double)|
-|**avg_duration**  <br>*optional*|number (double)|
-|**week**  <br>*optional*|integer (int64)|
-|**year**  <br>*optional*|integer (int64)|
+|**avg_distance**  *optional*|number (double)|
+|**avg_duration**  *optional*|number (double)|
+|**week**  *optional*|integer (int64)|
+|**year**  *optional*|integer (int64)|
 
 
 
